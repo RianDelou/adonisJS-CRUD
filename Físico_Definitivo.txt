@@ -421,3 +421,70 @@ ALTER TABLE emprestimo ADD CONSTRAINT FK_emprestimo_2
     FOREIGN KEY (fk_LIVROS_idLivros)
     REFERENCES LIVROS (idLivros)
     ON DELETE SET NULL;
+
+-- Inserts para tabela CLIENTE
+INSERT INTO CLIENTE (idade, senha, e_mail, idCliente, bairro, numAp, Rua, CEP, nome)
+VALUES
+    (30, 'senha123', 'cliente1@example.com', 1, 'Centro', 101, 'Rua A', 12345678, 'Cliente 1'),
+    (25, 'abc456', 'cliente2@example.com', 2, 'Bairro 2', 202, 'Rua B', 23456789, 'Cliente 2'),
+    (35, 'qwerty789', 'cliente3@example.com', 3, 'Bairro 3', 303, 'Rua C', 34567890, 'Cliente 3');
+
+-- Inserts para tabela PRODUTO
+INSERT INTO PRODUTO (nome, valor, avaliacaoMedia, idProduto)
+VALUES
+    ('Produto A', 50.99, 4.2, 1),
+    ('Produto B', 29.99, 3.8, 2),
+    ('Produto C', 99.99, 4.5, 3);
+
+-- Inserts para tabela PEDIDO
+INSERT INTO PEDIDO (notaFiscal, metodoPagamento, dataEntrega, idPedido, idCliente, entregaExpressa, entregaPadrao, dataPedido)
+VALUES
+    (123456, 'Cartão de crédito', '2024-04-23', 1, 1, TRUE, FALSE, '2024-04-20'),
+    (789012, 'Boleto bancário', '2024-04-25', 2, 2, FALSE, TRUE, '2024-04-21'),
+    (345678, 'Transferência bancária', '2024-04-24', 3, 3, TRUE, FALSE, '2024-04-22');
+
+-- Inserts para tabela AVALIACAO
+INSERT INTO AVALIACAO (estrelas_1, estrelas_2, estrelas_3, estrelas_4, estrelas_5, comentario, idAvaliacao_, idProduto)
+VALUES
+    (FALSE, TRUE, FALSE, FALSE, TRUE, 'Gostei muito do Produto A!', 1, 1),
+    (FALSE, FALSE, TRUE, TRUE, FALSE, 'Produto B atendeu minhas expectativas.', 2, 2),
+    (TRUE, FALSE, FALSE, TRUE, FALSE, 'Produto C superou minhas expectativas.', 3, 3);
+
+-- Inserts para tabela ALUNO
+INSERT INTO ALUNO (Falta, Sobrenome, Primeiro_Nome, idAluno, FK_Responsavel_idResponsavel, FK_PSICOLOGO_idPsicologo, FK_PSICOLOGO_FK_FUNCIONARIO_FISICO_contrato)
+VALUES
+    (2, 'Silva', 'João', 1, NULL, NULL, NULL),
+    (0, 'Souza', 'Maria', 2, NULL, NULL, NULL),
+    (1, 'Oliveira', 'Pedro', 3, NULL, NULL, NULL);
+
+-- Update na tabela CLIENTE
+UPDATE CLIENTE
+SET idade = 40
+WHERE idCliente = 1;
+
+-- Update na tabela PRODUTO
+UPDATE PRODUTO
+SET valor = 59.99
+WHERE idProduto = 2;
+
+-- Update na tabela PEDIDO
+UPDATE PEDIDO
+SET metodoPagamento = 'Pix', entregaExpressa = TRUE
+WHERE idPedido = 3;
+
+-- Update na tabela ALUNO
+UPDATE ALUNO
+SET Falta = 3
+WHERE idAluno = 2;
+
+-- Delete na tabela CLIENTE
+DELETE FROM CLIENTE
+WHERE idCliente = 3;
+
+-- Delete na tabela PEDIDO
+DELETE FROM PEDIDO
+WHERE idPedido = 1;
+
+-- Delete na tabela PRODUTO
+DELETE FROM PRODUTO
+WHERE idProduto = 3;
