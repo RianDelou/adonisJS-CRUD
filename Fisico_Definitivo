@@ -1,0 +1,423 @@
+/* Lógico_Definitivo: */
+
+CREATE TABLE cupomDesconto (
+    descricaoDesconto VARCHAR,
+    idCupomDesconto INTEGER PRIMARY KEY,
+    valorDesconto FLOAT
+);
+
+CREATE TABLE PESSOA_JURIDICA (
+    CNPJ INTEGER,
+    IM INTEGER,
+    IE INTEGER,
+    idPessoaJuridica INTEGER,
+    FK_CLIENTE_idCliente INTEGER,
+    PRIMARY KEY (idPessoaJuridica, FK_CLIENTE_idCliente)
+);
+
+CREATE TABLE Estudante (
+    carteiraEstudante INTEGER,
+    desconto FLOAT,
+    nomeEscola VARCHAR,
+    fk_CLIENTE_idCliente INTEGER,
+    PRIMARY KEY (carteiraEstudante, fk_CLIENTE_idCliente)
+);
+
+CREATE TABLE DESCONTO (
+    DescontoEstudante FLOAT,
+    idDesconto_ INTEGER,
+    idPedido INTEGER,
+    DescontoFuncionario FLOAT,
+    DescontoBolsista FLOAT,
+    DescontoPessoaJuridica FLOAT,
+    FK_cupomDesconto_idCupomDesconto INTEGER,
+    FK_PEDIDO_idPedido INTEGER,
+    FK_PEDIDO_idCliente INTEGER,
+    PRIMARY KEY (idDesconto_, idPedido)
+);
+
+CREATE TABLE CLIENTE (
+    idade INTEGER,
+    senha VARCHAR,
+    e_mail VARCHAR,
+    idCliente INTEGER PRIMARY KEY,
+    bairro VARCHAR,
+    numAp INTEGER,
+    Rua VARCHAR,
+    CEP INTEGER,
+    nome VARCHAR
+);
+
+CREATE TABLE PESSOA_FISICA (
+    CPF INTEGER,
+    IDPessoaFisica INTEGER,
+    RG INTEGER,
+    FK_CLIENTE_idCliente INTEGER,
+    PRIMARY KEY (IDPessoaFisica, FK_CLIENTE_idCliente)
+);
+
+CREATE TABLE PEDIDO (
+    notaFiscal INTEGER,
+    metodoPagamento VARCHAR,
+    dataEntrega DATE,
+    idPedido INTEGER,
+    idCliente INTEGER,
+    entregaExpressa BOOLEAN,
+    entregaPadrao BOOLEAN,
+    dataPedido DATE,
+    FK_CLIENTE_idCliente INTEGER,
+    PRIMARY KEY (idPedido, idCliente)
+);
+
+CREATE TABLE AVALIACAO (
+    estrelas_1 BOOLEAN,
+    estrelas_2 BOOLEAN,
+    estrelas_3 BOOLEAN,
+    estrelas_4 BOOLEAN,
+    estrelas_5 BOOLEAN,
+    comentario VARCHAR,
+    idAvaliacao_ INTEGER,
+    idProduto INTEGER,
+    FK_PRODUTO_idProduto INTEGER,
+    PRIMARY KEY (idAvaliacao_, idProduto)
+);
+
+CREATE TABLE TELEFONECLIENTE (
+    telefoneCelular INTEGER,
+    telefoneEmpresarial INTEGER,
+    idCliente INTEGER,
+    idTelefone_ INTEGER,
+    FK_CLIENTE_idCliente INTEGER,
+    PRIMARY KEY (idCliente, idTelefone_)
+);
+
+CREATE TABLE PRODUTO_PEDIDO_Contem (
+    valorProduto FLOAT,
+    fk_PEDIDO_idPedido INTEGER,
+    fk_PEDIDO_idCliente INTEGER,
+    fk_PRODUTO_idProduto INTEGER
+);
+
+CREATE TABLE PRODUTO (
+    nome VARCHAR,
+    valor FLOAT,
+    avaliacaoMedia FLOAT,
+    idProduto INTEGER PRIMARY KEY
+);
+
+CREATE TABLE GERENTE_PRODUTOS (
+    idGerenteProdutos INTEGER,
+    FK_FUNCIONARIO_VIRTUAL_contrato BOOLEAN,
+    PRIMARY KEY (idGerenteProdutos, FK_FUNCIONARIO_VIRTUAL_contrato)
+);
+
+CREATE TABLE DP_GERAL (
+    idDepartamento INTEGER PRIMARY KEY
+);
+
+CREATE TABLE CEO_ (
+    idCEO INTEGER,
+    FK_DP_GERAL_idDepartamento INTEGER,
+    PRIMARY KEY (idCEO, FK_DP_GERAL_idDepartamento)
+);
+
+CREATE TABLE DIRETORIA_ESC (
+    idDiretoriaEsc INTEGER,
+    biblioteca BOOLEAN,
+    FK_DP_GERAL_idDepartamento INTEGER,
+    PRIMARY KEY (idDiretoriaEsc, FK_DP_GERAL_idDepartamento)
+);
+
+CREATE TABLE CURSOS (
+    nomeCurso VARCHAR,
+    tema VARCHAR,
+    idCursos INTEGER,
+    ementa VARCHAR,
+    professorCurso VARCHAR,
+    FK_PRODUTO_idProduto INTEGER,
+    PRIMARY KEY (idCursos, FK_PRODUTO_idProduto)
+);
+
+CREATE TABLE EBOOKS (
+    sinopse VARCHAR,
+    autor VARCHAR,
+    titulo VARCHAR,
+    idEbooks INTEGER,
+    quantEstoque INTEGER,
+    FK_PRODUTO_idProduto INTEGER,
+    PRIMARY KEY (idEbooks, FK_PRODUTO_idProduto)
+);
+
+CREATE TABLE ACESSORIOSTEMATICOS (
+    quantEstoque INTEGER,
+    nomeAcessorio VARCHAR,
+    descricao VARCHAR,
+    idAcessoriosTematicos INTEGER,
+    FK_PRODUTO_idProduto INTEGER,
+    PRIMARY KEY (idAcessoriosTematicos, FK_PRODUTO_idProduto)
+);
+
+CREATE TABLE FUNCIONARIO_FISICO (
+    cpf INTEGER,
+    contrato BOOLEAN PRIMARY KEY,
+    sobrenome VARCHAR,
+    Primeiro_Nome VARCHAR,
+    salario FLOAT,
+    FK_DIRETORIA_ESC_idDiretoriaEsc INTEGER,
+    FK_DIRETORIA_ESC_FK_DP_GERAL_idDepartamento INTEGER
+);
+
+CREATE TABLE PSICOLOGO (
+    idPsicologo INTEGER,
+    especializacao VARCHAR,
+    FK_FUNCIONARIO_FISICO_contrato BOOLEAN,
+    PRIMARY KEY (idPsicologo, FK_FUNCIONARIO_FISICO_contrato)
+);
+
+CREATE TABLE PROFESSOR (
+    idProfessor INTEGER,
+    Falta INTEGER,
+    diploma BOOLEAN,
+    FK_FUNCIONARIO_FISICO_contrato BOOLEAN,
+    PRIMARY KEY (idProfessor, FK_FUNCIONARIO_FISICO_contrato)
+);
+
+CREATE TABLE FUNCIONARIO_VIRTUAL (
+    contrato BOOLEAN PRIMARY KEY,
+    cpf INTEGER,
+    salario FLOAT,
+    Primeiro_Nome VARCHAR,
+    sobrenome VARCHAR,
+    FK_CEO__idCEO INTEGER,
+    FK_CEO__FK_DP_GERAL_idDepartamento INTEGER
+);
+
+CREATE TABLE DISCIPLINA (
+    idDisciplina INTEGER PRIMARY KEY,
+    Presencial BOOLEAN,
+    Remota BOOLEAN,
+    Eletiva BOOLEAN,
+    Obrigatoria BOOLEAN
+);
+
+CREATE TABLE ALUNO (
+    Falta INTEGER,
+    Sobrenome VARCHAR,
+    Primeiro_Nome VARCHAR,
+    idAluno INTEGER PRIMARY KEY,
+    FK_Responsavel_idResponsavel INTEGER,
+    FK_PSICOLOGO_idPsicologo INTEGER,
+    FK_PSICOLOGO_FK_FUNCIONARIO_FISICO_contrato BOOLEAN
+);
+
+CREATE TABLE Bolsista (
+    Comprovante_de_Renda BOOLEAN,
+    idBolsista INTEGER,
+    comprovante_de_contrato BOOLEAN,
+    fk_ALUNO_idAluno INTEGER,
+    PRIMARY KEY (idBolsista, fk_ALUNO_idAluno)
+);
+
+CREATE TABLE Responsavel (
+    Nome VARCHAR,
+    email VARCHAR,
+    idResponsavel INTEGER PRIMARY KEY,
+    fk_FUNCIONARIO_FISICO_contrato BOOLEAN
+);
+
+CREATE TABLE LIVROS (
+    titulo VARCHAR,
+    sinopse VARCHAR,
+    idLivros INTEGER PRIMARY KEY,
+    autor VARCHAR,
+    FK_DIRETORIA_ESC_idDiretoriaEsc INTEGER,
+    FK_DIRETORIA_ESC_FK_DP_GERAL_idDepartamento INTEGER
+);
+
+CREATE TABLE Gerencia (
+    fk_GERENTE_PRODUTOS_idGerenteProdutos INTEGER,
+    fk_GERENTE_PRODUTOS_FK_FUNCIONARIO_VIRTUAL_contrato BOOLEAN,
+    fk_PRODUTO_idProduto INTEGER
+);
+
+CREATE TABLE Leciona (
+    fk_PROFESSOR_idProfessor INTEGER,
+    fk_PROFESSOR_FK_FUNCIONARIO_FISICO_contrato BOOLEAN,
+    fk_DISCIPLINA_idDisciplina INTEGER
+);
+
+CREATE TABLE paga (
+    fk_DISCIPLINA_idDisciplina INTEGER,
+    fk_ALUNO_idAluno INTEGER
+);
+
+CREATE TABLE emprestimo (
+    fk_ALUNO_idAluno INTEGER,
+    fk_LIVROS_idLivros INTEGER,
+    multaAtraso FLOAT,
+    dataEntrega DATE,
+    dataEmprestimo DATE
+);
+ 
+ALTER TABLE PESSOA_JURIDICA ADD CONSTRAINT FK_PESSOA_JURIDICA_2
+    FOREIGN KEY (FK_CLIENTE_idCliente)
+    REFERENCES CLIENTE (idCliente)
+    ON DELETE CASCADE;
+ 
+ALTER TABLE Estudante ADD CONSTRAINT FK_Estudante_2
+    FOREIGN KEY (fk_CLIENTE_idCliente)
+    REFERENCES CLIENTE (idCliente)
+    ON DELETE CASCADE;
+ 
+ALTER TABLE DESCONTO ADD CONSTRAINT FK_DESCONTO_2
+    FOREIGN KEY (FK_cupomDesconto_idCupomDesconto)
+    REFERENCES cupomDesconto (idCupomDesconto)
+    ON DELETE RESTRICT;
+ 
+ALTER TABLE DESCONTO ADD CONSTRAINT FK_DESCONTO_3
+    FOREIGN KEY (FK_PEDIDO_idPedido, FK_PEDIDO_idCliente)
+    REFERENCES PEDIDO (idPedido, idCliente)
+    ON DELETE CASCADE;
+ 
+ALTER TABLE PESSOA_FISICA ADD CONSTRAINT FK_PESSOA_FISICA_2
+    FOREIGN KEY (FK_CLIENTE_idCliente)
+    REFERENCES CLIENTE (idCliente)
+    ON DELETE CASCADE;
+ 
+ALTER TABLE PEDIDO ADD CONSTRAINT FK_PEDIDO_2
+    FOREIGN KEY (FK_CLIENTE_idCliente)
+    REFERENCES CLIENTE (idCliente)
+    ON DELETE CASCADE;
+ 
+ALTER TABLE AVALIACAO ADD CONSTRAINT FK_AVALIACAO_2
+    FOREIGN KEY (FK_PRODUTO_idProduto)
+    REFERENCES PRODUTO (idProduto)
+    ON DELETE CASCADE;
+ 
+ALTER TABLE TELEFONECLIENTE ADD CONSTRAINT FK_TELEFONECLIENTE_2
+    FOREIGN KEY (FK_CLIENTE_idCliente)
+    REFERENCES CLIENTE (idCliente)
+    ON DELETE CASCADE;
+ 
+ALTER TABLE PRODUTO_PEDIDO_Contem ADD CONSTRAINT FK_PRODUTO_PEDIDO_Contem_1
+    FOREIGN KEY (fk_PEDIDO_idPedido, fk_PEDIDO_idCliente)
+    REFERENCES PEDIDO (idPedido, idCliente);
+ 
+ALTER TABLE PRODUTO_PEDIDO_Contem ADD CONSTRAINT FK_PRODUTO_PEDIDO_Contem_2
+    FOREIGN KEY (fk_PRODUTO_idProduto)
+    REFERENCES PRODUTO (idProduto);
+ 
+ALTER TABLE GERENTE_PRODUTOS ADD CONSTRAINT FK_GERENTE_PRODUTOS_2
+    FOREIGN KEY (FK_FUNCIONARIO_VIRTUAL_contrato)
+    REFERENCES FUNCIONARIO_VIRTUAL (contrato)
+    ON DELETE CASCADE;
+ 
+ALTER TABLE CEO_ ADD CONSTRAINT FK_CEO__2
+    FOREIGN KEY (FK_DP_GERAL_idDepartamento)
+    REFERENCES DP_GERAL (idDepartamento)
+    ON DELETE CASCADE;
+ 
+ALTER TABLE DIRETORIA_ESC ADD CONSTRAINT FK_DIRETORIA_ESC_2
+    FOREIGN KEY (FK_DP_GERAL_idDepartamento)
+    REFERENCES DP_GERAL (idDepartamento)
+    ON DELETE CASCADE;
+ 
+ALTER TABLE CURSOS ADD CONSTRAINT FK_CURSOS_2
+    FOREIGN KEY (FK_PRODUTO_idProduto)
+    REFERENCES PRODUTO (idProduto)
+    ON DELETE CASCADE;
+ 
+ALTER TABLE EBOOKS ADD CONSTRAINT FK_EBOOKS_2
+    FOREIGN KEY (FK_PRODUTO_idProduto)
+    REFERENCES PRODUTO (idProduto)
+    ON DELETE CASCADE;
+ 
+ALTER TABLE ACESSORIOSTEMATICOS ADD CONSTRAINT FK_ACESSORIOSTEMATICOS_2
+    FOREIGN KEY (FK_PRODUTO_idProduto)
+    REFERENCES PRODUTO (idProduto)
+    ON DELETE CASCADE;
+ 
+ALTER TABLE FUNCIONARIO_FISICO ADD CONSTRAINT FK_FUNCIONARIO_FISICO_2
+    FOREIGN KEY (FK_DIRETORIA_ESC_idDiretoriaEsc, FK_DIRETORIA_ESC_FK_DP_GERAL_idDepartamento)
+    REFERENCES DIRETORIA_ESC (idDiretoriaEsc, FK_DP_GERAL_idDepartamento)
+    ON DELETE RESTRICT;
+ 
+ALTER TABLE PSICOLOGO ADD CONSTRAINT FK_PSICOLOGO_2
+    FOREIGN KEY (FK_FUNCIONARIO_FISICO_contrato)
+    REFERENCES FUNCIONARIO_FISICO (contrato)
+    ON DELETE CASCADE;
+ 
+ALTER TABLE PROFESSOR ADD CONSTRAINT FK_PROFESSOR_2
+    FOREIGN KEY (FK_FUNCIONARIO_FISICO_contrato)
+    REFERENCES FUNCIONARIO_FISICO (contrato)
+    ON DELETE CASCADE;
+ 
+ALTER TABLE FUNCIONARIO_VIRTUAL ADD CONSTRAINT FK_FUNCIONARIO_VIRTUAL_2
+    FOREIGN KEY (FK_CEO__idCEO, FK_CEO__FK_DP_GERAL_idDepartamento)
+    REFERENCES CEO_ (idCEO, FK_DP_GERAL_idDepartamento)
+    ON DELETE RESTRICT;
+ 
+ALTER TABLE ALUNO ADD CONSTRAINT FK_ALUNO_2
+    FOREIGN KEY (FK_Responsavel_idResponsavel)
+    REFERENCES Responsavel (idResponsavel)
+    ON DELETE RESTRICT;
+ 
+ALTER TABLE ALUNO ADD CONSTRAINT FK_ALUNO_3
+    FOREIGN KEY (FK_PSICOLOGO_idPsicologo, FK_PSICOLOGO_FK_FUNCIONARIO_FISICO_contrato)
+    REFERENCES PSICOLOGO (idPsicologo, FK_FUNCIONARIO_FISICO_contrato)
+    ON DELETE SET NULL;
+ 
+ALTER TABLE Bolsista ADD CONSTRAINT FK_Bolsista_2
+    FOREIGN KEY (fk_ALUNO_idAluno)
+    REFERENCES ALUNO (idAluno)
+    ON DELETE CASCADE;
+ 
+ALTER TABLE Responsavel ADD CONSTRAINT FK_Responsavel_2
+    FOREIGN KEY (fk_FUNCIONARIO_FISICO_contrato)
+    REFERENCES FUNCIONARIO_FISICO (contrato)
+    ON DELETE SET NULL;
+ 
+ALTER TABLE LIVROS ADD CONSTRAINT FK_LIVROS_2
+    FOREIGN KEY (FK_DIRETORIA_ESC_idDiretoriaEsc, FK_DIRETORIA_ESC_FK_DP_GERAL_idDepartamento)
+    REFERENCES DIRETORIA_ESC (idDiretoriaEsc, FK_DP_GERAL_idDepartamento)
+    ON DELETE RESTRICT;
+ 
+ALTER TABLE Gerencia ADD CONSTRAINT FK_Gerencia_1
+    FOREIGN KEY (fk_GERENTE_PRODUTOS_idGerenteProdutos, fk_GERENTE_PRODUTOS_FK_FUNCIONARIO_VIRTUAL_contrato)
+    REFERENCES GERENTE_PRODUTOS (idGerenteProdutos, FK_FUNCIONARIO_VIRTUAL_contrato)
+    ON DELETE RESTRICT;
+ 
+ALTER TABLE Gerencia ADD CONSTRAINT FK_Gerencia_2
+    FOREIGN KEY (fk_PRODUTO_idProduto)
+    REFERENCES PRODUTO (idProduto)
+    ON DELETE RESTRICT;
+ 
+ALTER TABLE Leciona ADD CONSTRAINT FK_Leciona_1
+    FOREIGN KEY (fk_PROFESSOR_idProfessor, fk_PROFESSOR_FK_FUNCIONARIO_FISICO_contrato)
+    REFERENCES PROFESSOR (idProfessor, FK_FUNCIONARIO_FISICO_contrato)
+    ON DELETE RESTRICT;
+ 
+ALTER TABLE Leciona ADD CONSTRAINT FK_Leciona_2
+    FOREIGN KEY (fk_DISCIPLINA_idDisciplina)
+    REFERENCES DISCIPLINA (idDisciplina)
+    ON DELETE RESTRICT;
+ 
+ALTER TABLE paga ADD CONSTRAINT FK_paga_1
+    FOREIGN KEY (fk_DISCIPLINA_idDisciplina)
+    REFERENCES DISCIPLINA (idDisciplina)
+    ON DELETE RESTRICT;
+ 
+ALTER TABLE paga ADD CONSTRAINT FK_paga_2
+    FOREIGN KEY (fk_ALUNO_idAluno)
+    REFERENCES ALUNO (idAluno)
+    ON DELETE RESTRICT;
+ 
+ALTER TABLE emprestimo ADD CONSTRAINT FK_emprestimo_1
+    FOREIGN KEY (fk_ALUNO_idAluno)
+    REFERENCES ALUNO (idAluno)
+    ON DELETE SET NULL;
+ 
+ALTER TABLE emprestimo ADD CONSTRAINT FK_emprestimo_2
+    FOREIGN KEY (fk_LIVROS_idLivros)
+    REFERENCES LIVROS (idLivros)
+    ON DELETE SET NULL;
