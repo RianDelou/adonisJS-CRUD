@@ -31,7 +31,7 @@
     <br>
     <p>Com essa informação, conseguimos pegar esses estudantes e fazer uma propaganda da nossa escola. Pois, além de incentivar os alunos nos estudos para aparecerem como os estudantes com melhores notas na propaganda da escola, iremos atrair os reesponsaveis que querem colocar o seu filho(a) em um escola que tem um ensino adequado, aumentando as chances de lucro na instituição</p>
     <br>
-    <li>O que o(a) aluno(a) que mais alugou livros na biblioteca pode ganhar? </li>
+    <li>O que o(a) aluno(a) que mais alugou livros no mês na biblioteca pode ganhar? </li>
     <br>
     <p> Com isso, conseguimos fazer o estudante adquirir um cupom exclusivo da nossa loja, que deve garantir um desconto agradável, mas que faça com que a gente incentive os estudantes a alugarem mais livros, aumentando o lucro da instituição</p>
   </ol>
