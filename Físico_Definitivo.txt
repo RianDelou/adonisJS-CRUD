@@ -1,4 +1,4 @@
-/* Lógico_1: */
+/* Lógico_Definitivo: */
 
 CREATE TABLE cupomDesconto (
     descricaoDesconto VARCHAR,
@@ -70,7 +70,7 @@ CREATE TABLE PEDIDO (
     PRIMARY KEY (idPedido, idCliente)
 );
 
-CREATE TABLE AVALIACAO (
+CREATE TABLE AVALIAÇÃO (
     estrelas_1 BOOLEAN,
     estrelas_2 BOOLEAN,
     estrelas_3 BOOLEAN,
@@ -195,7 +195,6 @@ CREATE TABLE FUNCIONARIO_VIRTUAL (
     FK_CEO_FK_DP_GERAL_idDepartamento INTEGER
 );
 
-
 CREATE TABLE DISCIPLINA (
     idDisciplina INTEGER PRIMARY KEY,
     Presencial BOOLEAN,
@@ -208,7 +207,6 @@ CREATE TABLE ALUNO (
     Sobrenome VARCHAR,
     Primeiro_Nome VARCHAR,
     idAluno INTEGER PRIMARY KEY,
-    nota FLOAT,
     Falta INTEGER,
     qntEmprestimo INTEGER,
     FK_Responsavel_idResponsavel INTEGER,
@@ -254,7 +252,8 @@ CREATE TABLE Leciona (
 
 CREATE TABLE paga (
     fk_DISCIPLINA_idDisciplina INTEGER,
-    fk_ALUNO_idAluno INTEGER
+    fk_ALUNO_idAluno INTEGER,
+    notaDisciplina FLOAT
 );
 
 CREATE TABLE emprestimo (
@@ -295,7 +294,7 @@ ALTER TABLE PEDIDO ADD CONSTRAINT FK_PEDIDO_2
     REFERENCES CLIENTE (idCliente)
     ON DELETE CASCADE;
  
-ALTER TABLE AVALIACAO ADD CONSTRAINT FK_AVALIACAO_2
+ALTER TABLE AVALIAÇÃO ADD CONSTRAINT FK_AVALIAÇÃO_2
     FOREIGN KEY (FK_PRODUTO_idProduto)
     REFERENCES PRODUTO (idProduto)
     ON DELETE CASCADE;
@@ -428,20 +427,6 @@ ALTER TABLE emprestimo ADD CONSTRAINT FK_emprestimo_3
     REFERENCES LIVROS (idLivros)
     ON DELETE SET NULL;
     
-    -- Inserts para tabela CLIENTE
-INSERT INTO CLIENTE (idade, senha, email, idCliente, bairro, numAp, Rua, CEP, nome)
-VALUES
-    (30, 'senha123', 'cliente1@example.com', 1, 'Centro', 101, 'Rua A', 12345678, 'Cliente 1'),
-    (25, 'abc456', 'cliente2@example.com', 2, 'Bairro 2', 202, 'Rua B', 23456789, 'Cliente 2'),
-    (35, 'qwerty789', 'cliente3@example.com', 3, 'Bairro 3', 303, 'Rua C', 34567890, 'Cliente 3');
-
--- Inserts para tabela PRODUTO
-INSERT INTO PRODUTO (nome, valor, avaliacaoMedia, idProduto)
-VALUES
-    ('Produto A', 50.99, 4.2, 1),
-    ('Produto B', 29.99, 3.8, 2),
-    ('Produto C', 99.99, 4.5, 3);
-
 -- Inserts para tabela PEDIDO
 INSERT INTO PEDIDO (notaFiscal, metodoPagamento, dataEntrega, idPedido, idCliente, entregaExpressa, entregaPadrao, dataPedido)
 VALUES
@@ -450,7 +435,7 @@ VALUES
     (345678, 'Transferência bancária', '2024-04-24', 3, 3, TRUE, FALSE, '2024-04-22');
 
 -- Inserts para tabela AVALIACAO
-INSERT INTO AVALIACAO (estrelas_1, estrelas_2, estrelas_3, estrelas_4, estrelas_5, comentario, idAvaliacao, idProduto)
+INSERT INTO AVALIAÇÃO (estrelas_1, estrelas_2, estrelas_3, estrelas_4, estrelas_5, comentario, idAvaliacao, idProduto)
 VALUES
     (FALSE, TRUE, FALSE, FALSE, TRUE, 'Gostei muito do Produto A!', 1, 1),
     (FALSE, FALSE, TRUE, TRUE, FALSE, 'Produto B atendeu minhas expectativas.', 2, 2),
