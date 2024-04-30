@@ -1,13 +1,14 @@
-/* Lógico_Definitivo: */
+/* Lógico_1: */
 
 CREATE TABLE cupomDesconto (
     descricaoDesconto VARCHAR,
     idCupomDesconto INTEGER PRIMARY KEY,
-    valorDesconto FLOAT
+    valorDesconto FLOAT,
+    qntUtilizada INTEGER
 );
 
 CREATE TABLE PESSOA_JURIDICA (
-    CNPJ INTEGER,
+    CNPJ VARCHAR,
     IM INTEGER,
     IE INTEGER,
     idPessoaJuridica INTEGER,
@@ -25,7 +26,7 @@ CREATE TABLE Estudante (
 
 CREATE TABLE DESCONTO (
     DescontoEstudante FLOAT,
-    idDesconto_ INTEGER,
+    idDesconto  INTEGER,
     idPedido INTEGER,
     DescontoFuncionario FLOAT,
     DescontoBolsista FLOAT,
@@ -33,27 +34,27 @@ CREATE TABLE DESCONTO (
     FK_cupomDesconto_idCupomDesconto INTEGER,
     FK_PEDIDO_idPedido INTEGER,
     FK_PEDIDO_idCliente INTEGER,
-    PRIMARY KEY (idDesconto_, idPedido)
+    PRIMARY KEY (idDesconto , idPedido)
 );
 
 CREATE TABLE CLIENTE (
     idade INTEGER,
     senha VARCHAR,
-    e_mail VARCHAR,
+    email VARCHAR,
     idCliente INTEGER PRIMARY KEY,
     bairro VARCHAR,
     numAp INTEGER,
     Rua VARCHAR,
-    CEP INTEGER,
+    CEP VARCHAR,
     nome VARCHAR
 );
 
-CREATE TABLE PESSOA_FISICA (
-    CPF INTEGER,
-    IDPessoaFisica INTEGER,
-    RG INTEGER,
+CREATE TABLE PESSOA_FÍSICA (
+    CPF VARCHAR,
+    IDPessoaFísica INTEGER,
+    RG VARCHAR,
     FK_CLIENTE_idCliente INTEGER,
-    PRIMARY KEY (IDPessoaFisica, FK_CLIENTE_idCliente)
+    PRIMARY KEY (IDPessoaFísica, FK_CLIENTE_idCliente)
 );
 
 CREATE TABLE PEDIDO (
@@ -76,23 +77,23 @@ CREATE TABLE AVALIACAO (
     estrelas_4 BOOLEAN,
     estrelas_5 BOOLEAN,
     comentario VARCHAR,
-    idAvaliacao_ INTEGER,
+    idAvaliacao  INTEGER,
     idProduto INTEGER,
     FK_PRODUTO_idProduto INTEGER,
-    PRIMARY KEY (idAvaliacao_, idProduto)
+    PRIMARY KEY (idAvaliacao , idProduto)
 );
 
 CREATE TABLE TELEFONECLIENTE (
-    telefoneCelular INTEGER,
-    telefoneEmpresarial INTEGER,
+    telefoneCelular VARCHAR,
+    telefoneEmpresarial VARCHAR,
     idCliente INTEGER,
-    idTelefone_ INTEGER,
+    idTelefone  INTEGER,
     FK_CLIENTE_idCliente INTEGER,
-    PRIMARY KEY (idCliente, idTelefone_)
+    PRIMARY KEY (idCliente, idTelefone )
 );
 
-CREATE TABLE PRODUTO_PEDIDO_Contem (
-    valorProduto FLOAT,
+CREATE TABLE PRODUTO_PEDIDO_Contém (
+    somaValorProduto FLOAT,
     fk_PEDIDO_idPedido INTEGER,
     fk_PEDIDO_idCliente INTEGER,
     fk_PRODUTO_idProduto INTEGER
@@ -102,12 +103,13 @@ CREATE TABLE PRODUTO (
     nome VARCHAR,
     valor FLOAT,
     avaliacaoMedia FLOAT,
-    idProduto INTEGER PRIMARY KEY
+    idProduto INTEGER PRIMARY KEY,
+    totalVendas INTEGER
 );
 
 CREATE TABLE GERENTE_PRODUTOS (
     idGerenteProdutos INTEGER,
-    FK_FUNCIONARIO_VIRTUAL_contrato BOOLEAN,
+    FK_FUNCIONARIO_VIRTUAL_contrato INTEGER,
     PRIMARY KEY (idGerenteProdutos, FK_FUNCIONARIO_VIRTUAL_contrato)
 );
 
@@ -115,7 +117,7 @@ CREATE TABLE DP_GERAL (
     idDepartamento INTEGER PRIMARY KEY
 );
 
-CREATE TABLE CEO_ (
+CREATE TABLE CEO  (
     idCEO INTEGER,
     FK_DP_GERAL_idDepartamento INTEGER,
     PRIMARY KEY (idCEO, FK_DP_GERAL_idDepartamento)
@@ -134,6 +136,7 @@ CREATE TABLE CURSOS (
     idCursos INTEGER,
     ementa VARCHAR,
     professorCurso VARCHAR,
+    certificado BOOLEAN,
     FK_PRODUTO_idProduto INTEGER,
     PRIMARY KEY (idCursos, FK_PRODUTO_idProduto)
 );
@@ -158,7 +161,7 @@ CREATE TABLE ACESSORIOSTEMATICOS (
 );
 
 CREATE TABLE FUNCIONARIO_FISICO (
-    cpf INTEGER,
+    cpf VARCHAR,
     contrato BOOLEAN PRIMARY KEY,
     sobrenome VARCHAR,
     Primeiro_Nome VARCHAR,
@@ -183,14 +186,15 @@ CREATE TABLE PROFESSOR (
 );
 
 CREATE TABLE FUNCIONARIO_VIRTUAL (
-    contrato BOOLEAN PRIMARY KEY,
-    cpf INTEGER,
+    contrato INTEGER PRIMARY KEY,
+    cpf VARCHAR,
     salario FLOAT,
     Primeiro_Nome VARCHAR,
     sobrenome VARCHAR,
-    FK_CEO__idCEO INTEGER,
-    FK_CEO__FK_DP_GERAL_idDepartamento INTEGER
+    FK_CEO_idCEO INTEGER,
+    FK_CEO_FK_DP_GERAL_idDepartamento INTEGER
 );
+
 
 CREATE TABLE DISCIPLINA (
     idDisciplina INTEGER PRIMARY KEY,
@@ -201,10 +205,12 @@ CREATE TABLE DISCIPLINA (
 );
 
 CREATE TABLE ALUNO (
-    Falta INTEGER,
     Sobrenome VARCHAR,
     Primeiro_Nome VARCHAR,
     idAluno INTEGER PRIMARY KEY,
+    nota FLOAT,
+    Falta INTEGER,
+    qntEmprestimo INTEGER,
     FK_Responsavel_idResponsavel INTEGER,
     FK_PSICOLOGO_idPsicologo INTEGER,
     FK_PSICOLOGO_FK_FUNCIONARIO_FISICO_contrato BOOLEAN
@@ -236,7 +242,7 @@ CREATE TABLE LIVROS (
 
 CREATE TABLE Gerencia (
     fk_GERENTE_PRODUTOS_idGerenteProdutos INTEGER,
-    fk_GERENTE_PRODUTOS_FK_FUNCIONARIO_VIRTUAL_contrato BOOLEAN,
+    fk_GERENTE_PRODUTOS_FK_FUNCIONARIO_VIRTUAL_contrato INTEGER,
     fk_PRODUTO_idProduto INTEGER
 );
 
@@ -256,7 +262,7 @@ CREATE TABLE emprestimo (
     fk_LIVROS_idLivros INTEGER,
     multaAtraso FLOAT,
     dataEntrega DATE,
-    dataEmprestimo DATE
+    dataEmprestimo DATE PRIMARY KEY
 );
  
 ALTER TABLE PESSOA_JURIDICA ADD CONSTRAINT FK_PESSOA_JURIDICA_2
@@ -279,7 +285,7 @@ ALTER TABLE DESCONTO ADD CONSTRAINT FK_DESCONTO_3
     REFERENCES PEDIDO (idPedido, idCliente)
     ON DELETE CASCADE;
  
-ALTER TABLE PESSOA_FISICA ADD CONSTRAINT FK_PESSOA_FISICA_2
+ALTER TABLE PESSOA_FÍSICA ADD CONSTRAINT FK_PESSOA_FÍSICA_2
     FOREIGN KEY (FK_CLIENTE_idCliente)
     REFERENCES CLIENTE (idCliente)
     ON DELETE CASCADE;
@@ -299,11 +305,11 @@ ALTER TABLE TELEFONECLIENTE ADD CONSTRAINT FK_TELEFONECLIENTE_2
     REFERENCES CLIENTE (idCliente)
     ON DELETE CASCADE;
  
-ALTER TABLE PRODUTO_PEDIDO_Contem ADD CONSTRAINT FK_PRODUTO_PEDIDO_Contem_1
+ALTER TABLE PRODUTO_PEDIDO_Contém ADD CONSTRAINT FK_PRODUTO_PEDIDO_Contém_1
     FOREIGN KEY (fk_PEDIDO_idPedido, fk_PEDIDO_idCliente)
     REFERENCES PEDIDO (idPedido, idCliente);
  
-ALTER TABLE PRODUTO_PEDIDO_Contem ADD CONSTRAINT FK_PRODUTO_PEDIDO_Contem_2
+ALTER TABLE PRODUTO_PEDIDO_Contém ADD CONSTRAINT FK_PRODUTO_PEDIDO_Contém_2
     FOREIGN KEY (fk_PRODUTO_idProduto)
     REFERENCES PRODUTO (idProduto);
  
@@ -312,7 +318,7 @@ ALTER TABLE GERENTE_PRODUTOS ADD CONSTRAINT FK_GERENTE_PRODUTOS_2
     REFERENCES FUNCIONARIO_VIRTUAL (contrato)
     ON DELETE CASCADE;
  
-ALTER TABLE CEO_ ADD CONSTRAINT FK_CEO__2
+ALTER TABLE CEO  ADD CONSTRAINT FK_CEO_2
     FOREIGN KEY (FK_DP_GERAL_idDepartamento)
     REFERENCES DP_GERAL (idDepartamento)
     ON DELETE CASCADE;
@@ -353,8 +359,8 @@ ALTER TABLE PROFESSOR ADD CONSTRAINT FK_PROFESSOR_2
     ON DELETE CASCADE;
  
 ALTER TABLE FUNCIONARIO_VIRTUAL ADD CONSTRAINT FK_FUNCIONARIO_VIRTUAL_2
-    FOREIGN KEY (FK_CEO__idCEO, FK_CEO__FK_DP_GERAL_idDepartamento)
-    REFERENCES CEO_ (idCEO, FK_DP_GERAL_idDepartamento)
+    FOREIGN KEY (FK_CEO_idCEO, FK_CEO_FK_DP_GERAL_idDepartamento)
+    REFERENCES CEO  (idCEO, FK_DP_GERAL_idDepartamento)
     ON DELETE RESTRICT;
  
 ALTER TABLE ALUNO ADD CONSTRAINT FK_ALUNO_2
@@ -412,18 +418,18 @@ ALTER TABLE paga ADD CONSTRAINT FK_paga_2
     REFERENCES ALUNO (idAluno)
     ON DELETE RESTRICT;
  
-ALTER TABLE emprestimo ADD CONSTRAINT FK_emprestimo_1
+ALTER TABLE emprestimo ADD CONSTRAINT FK_emprestimo_2
     FOREIGN KEY (fk_ALUNO_idAluno)
     REFERENCES ALUNO (idAluno)
     ON DELETE SET NULL;
  
-ALTER TABLE emprestimo ADD CONSTRAINT FK_emprestimo_2
+ALTER TABLE emprestimo ADD CONSTRAINT FK_emprestimo_3
     FOREIGN KEY (fk_LIVROS_idLivros)
     REFERENCES LIVROS (idLivros)
     ON DELETE SET NULL;
-
--- Inserts para tabela CLIENTE
-INSERT INTO CLIENTE (idade, senha, e_mail, idCliente, bairro, numAp, Rua, CEP, nome)
+    
+    -- Inserts para tabela CLIENTE
+INSERT INTO CLIENTE (idade, senha, email, idCliente, bairro, numAp, Rua, CEP, nome)
 VALUES
     (30, 'senha123', 'cliente1@example.com', 1, 'Centro', 101, 'Rua A', 12345678, 'Cliente 1'),
     (25, 'abc456', 'cliente2@example.com', 2, 'Bairro 2', 202, 'Rua B', 23456789, 'Cliente 2'),
@@ -444,7 +450,7 @@ VALUES
     (345678, 'Transferência bancária', '2024-04-24', 3, 3, TRUE, FALSE, '2024-04-22');
 
 -- Inserts para tabela AVALIACAO
-INSERT INTO AVALIACAO (estrelas_1, estrelas_2, estrelas_3, estrelas_4, estrelas_5, comentario, idAvaliacao_, idProduto)
+INSERT INTO AVALIACAO (estrelas_1, estrelas_2, estrelas_3, estrelas_4, estrelas_5, comentario, idAvaliacao, idProduto)
 VALUES
     (FALSE, TRUE, FALSE, FALSE, TRUE, 'Gostei muito do Produto A!', 1, 1),
     (FALSE, FALSE, TRUE, TRUE, FALSE, 'Produto B atendeu minhas expectativas.', 2, 2),
