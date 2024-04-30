@@ -27,7 +27,7 @@
     <br>
     <p>Com essa informação, conseguimos pegar o desconto mais utilizado e fazer ofertas cabiveis para ele. Para assim, os clientes usarem esse cupom com mais frequência, aumentando a possibilidade de lucro, além de deixar os clientes satisfeitos com a nossa loja.</p>
     <br>
-    <li>Quais foram as 10 maiores notas da escola por semestre em cada disciplina?</li>
+    <li>Quais foram as 3 maiores notas da escola por semestre em cada disciplina?</li>
     <br>
     <p>Com essa informação, conseguimos pegar esses estudantes e fazer uma propaganda da nossa escola. Pois, além de incentivar os alunos nos estudos para aparecerem como os estudantes com melhores notas na propaganda da escola, iremos atrair os reesponsaveis que querem colocar o seu filho(a) em um escola que tem um ensino adequado, aumentando as chances de lucro na instituição</p>
     <br>
