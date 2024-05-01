@@ -785,6 +785,11 @@ WITH CursosComprados AS (
         COUNT(DISTINCT CASE WHEN tipoProduto = 'curso' THEN fk_PRODUTO_idProduto END) AS TotalCursosComprados
     FROM
         PRODUTO_PEDIDO_Contem
+<<<<<<< HEAD
+=======
+    WHERE
+        fk_PRODUTO_idProduto BETWEEN 2005 AND 2010  -- IDs dos acessórios / eBooks
+>>>>>>> b29e5a2d80e55605aeb74df7f340b30885f64614
     GROUP BY
         FK_PEDIDO_idCliente
 )
@@ -808,6 +813,11 @@ WITH ProdutosComprados AS (
         COUNT(DISTINCT CASE WHEN tipoProduto IN ('eBook', 'acessorio') THEN fk_PRODUTO_idProduto END) AS TotalProdutosComprados
     FROM
         PRODUTO_PEDIDO_Contem
+<<<<<<< HEAD
+=======
+    WHERE
+        fk_PRODUTO_idProduto BETWEEN 2001 AND 2004 -- IDs dos acessórios / eBooks
+>>>>>>> b29e5a2d80e55605aeb74df7f340b30885f64614
     GROUP BY
         FK_PEDIDO_idCliente
 )
