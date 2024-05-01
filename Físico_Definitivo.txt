@@ -66,6 +66,7 @@ CREATE TABLE PEDIDO (
     entregaExpressa BOOLEAN,
     entregaPadrao BOOLEAN,
     dataPedido DATE,
+    totalVendas INTEGER,
     FK_CLIENTE_idCliente INTEGER,
     PRIMARY KEY (idPedido, idCliente)
 );
@@ -137,6 +138,7 @@ CREATE TABLE CURSOS (
     ementa VARCHAR,
     professorCurso VARCHAR,
     certificado BOOLEAN,
+    valor_cursos INTEGER,
     FK_PRODUTO_idProduto INTEGER,
     PRIMARY KEY (idCursos, FK_PRODUTO_idProduto)
 );
@@ -147,6 +149,7 @@ CREATE TABLE EBOOKS (
     titulo VARCHAR,
     idEbooks INTEGER,
     quantEstoque INTEGER,
+    valor_eBooks INTEGER,
     FK_PRODUTO_idProduto INTEGER,
     PRIMARY KEY (idEbooks, FK_PRODUTO_idProduto)
 );
@@ -156,6 +159,7 @@ CREATE TABLE ACESSORIOSTEMATICOS (
     nomeAcessorio VARCHAR,
     descricao VARCHAR,
     idAcessoriosTematicos INTEGER,
+    valor_acessorios INTEGER,
     FK_PRODUTO_idProduto INTEGER,
     PRIMARY KEY (idAcessoriosTematicos, FK_PRODUTO_idProduto)
 );
@@ -623,15 +627,49 @@ BEGIN
     FROM PEDIDO 
     WHERE dataPedido >= CURRENT_DATE - INTERVAL '1 month' AND dataPedido <= CURRENT_DATE;
 
+    RAISE NOTICE '-PERGUNTA 1- O número de pedidos realizados no último mês foi: %', contador;
+
     -- Exibição do valor da variável
-    UPDATE PRODUTO
+    UPDATE PEDIDO
     SET totalVendas = contador
-    WHERE idProduto > 0;
+    WHERE idPedido > 0;
 END $$;
 
-SELECT * FROM PRODUTO;
+--PERGUNTA 2
+DO $$
+DECLARE
+    contador_eBooks INTEGER;
+    contador_cursos INTEGER;
+    contador_acessorios INTEGER;
+    maior_contador INTEGER;
+BEGIN
+    -- Contagem de eBooks
+    SELECT COUNT(*) INTO contador_eBooks FROM EBOOKS;
+    -- Atualização do atributo correspondente na tabela EBOOKS
+    UPDATE EBOOKS SET valor_eBooks = contador_eBooks;
 
-SELECT * FROM PRODUTO;
+    -- Contagem de cursos
+    SELECT COUNT(*) INTO contador_cursos FROM CURSOS;
+    -- Atualização do atributo correspondente na tabela CURSOS
+    UPDATE CURSOS SET valor_cursos = contador_cursos;
+
+    -- Contagem de acessórios
+    SELECT COUNT(*) INTO contador_acessorios FROM ACESSORIOSTEMATICOS;
+    -- Atualização do atributo correspondente na tabela ACESSORIOSTEMATICOS
+    UPDATE ACESSORIOSTEMATICOS SET valor_acessorios = contador_acessorios;
+
+    -- Seleção do maior valor entre os contadores
+    SELECT GREATEST(contador_eBooks, contador_cursos, contador_acessorios) INTO maior_contador;
+
+    -- Exibir o maior contador com o nome do contador
+    RAISE NOTICE '-PERGUNTA 2- O produto mais vendido é: % com % vendas', 
+      CASE maior_contador
+          WHEN contador_eBooks THEN 'eBook'
+          WHEN contador_cursos THEN 'curso'
+          WHEN contador_acessorios THEN 'acessorio'
+      END,
+      maior_contador;
+END $$;
 
 -- PERGUNTA NUMERO 3
 SELECT 
