@@ -263,6 +263,11 @@ CREATE TABLE emprestimo (
     dataEntrega DATE,
     dataEmprestimo DATE PRIMARY KEY
 );
+
+CREATE TABLE cliente_cupomDesconto (
+    fk_cupomDesconto_idCupomDesconto INTEGER,
+    fk_CLIENTE_idCliente INTEGER
+);
  
 ALTER TABLE PESSOA_JURIDICA ADD CONSTRAINT FK_PESSOA_JURIDICA_2
     FOREIGN KEY (FK_CLIENTE_idCliente)
@@ -422,9 +427,14 @@ ALTER TABLE emprestimo ADD CONSTRAINT FK_emprestimo_2
     REFERENCES ALUNO (idAluno)
     ON DELETE SET NULL;
  
-ALTER TABLE emprestimo ADD CONSTRAINT FK_emprestimo_3
-    FOREIGN KEY (fk_LIVROS_idLivros)
-    REFERENCES LIVROS (idLivros)
+ALTER TABLE cliente_cupomDesconto ADD CONSTRAINT FK_cliente_cupomDesconto_1
+    FOREIGN KEY (fk_cupomDesconto_idCupomDesconto)
+    REFERENCES cupomDesconto (idCupomDesconto)
+    ON DELETE SET NULL;
+
+ALTER TABLE cliente_cupomDesconto ADD CONSTRAINT FK_cliente_cupomDesconto_2
+    FOREIGN KEY (fk_CLIENTE_idCliente)
+    REFERENCES cliente (idCliente)
     ON DELETE SET NULL;
     
 -- Inserts para tabela PEDIDO
@@ -486,7 +496,11 @@ VALUES
     (2003, 'acessório1', 12.31, null, 231),
     (2004, 'acessório2', 12.31, null, 100),
     (2005, 'curso1', 12.31, null, 142),
-    (2006, 'curso2', 12.31, null, 104);
+    (2006, 'curso2', 12.31, null, 104),
+    (2007, 'curso3', 12.31, null, 104),
+    (2008, 'curso4', 12.31, null, 104),
+    (2009, 'curso5', 12.31, null, 104),
+    (2010, 'curso6', 12.31, null, 104);
     
 -- Inserts para tabela AVALIAÇÃO
 INSERT INTO AVALIAÇÃO (estrelas_1, estrelas_2, estrelas_3, estrelas_4, estrelas_5, comentario, idAvaliacao, idProduto)
@@ -517,7 +531,11 @@ VALUES (5, 'Acessório 1', 'Descrição do acessório 1', 3001, 2003),
 -- Inserts para tabela CURSOS
 INSERT INTO CURSOS (nomeCurso, tema, idCursos, ementa, professorCurso, certificado, FK_PRODUTO_idProduto)
 VALUES ('Curso 1', 'Tema do Curso 1', 4001, 'Ementa do Curso 1', 'Professor 1', TRUE, 2005),
-       ('Curso 2', 'Tema do Curso 2', 4002, 'Ementa do Curso 2', 'Professor 2', TRUE, 2006);
+       ('Curso 2', 'Tema do Curso 2', 4002, 'Ementa do Curso 2', 'Professor 2', TRUE, 2006),
+       ('Curso 3', 'Tema do Curso 2', 4002, 'Ementa do Curso 2', 'Professor 2', TRUE, 2007),
+       ('Curso 4', 'Tema do Curso 2', 4002, 'Ementa do Curso 2', 'Professor 2', TRUE, 2008),
+       ('Curso 5', 'Tema do Curso 2', 4002, 'Ementa do Curso 2', 'Professor 2', TRUE, 2009),
+       ('Curso 6', 'Tema do Curso 2', 4002, 'Ementa do Curso 2', 'Professor 2', TRUE, 2010);
 
 -- Inserções de desconto
 INSERT INTO DESCONTO (DescontoEstudante, idDesconto, idPedido, DescontoFuncionario, DescontoBolsista, DescontoPessoaJuridica, FK_cupomDesconto_idCupomDesconto, FK_PEDIDO_idPedido, FK_PEDIDO_idCliente)
@@ -527,7 +545,34 @@ VALUES
        (0.5, 3, 3, NULL, NULL, NULL, NULL, 3, 3),
        (0.5, 4, 4, NULL, NULL, NULL, NULL, 4, 4),
        (NULL, 5, 5, 0.25, NULL, NULL, NULL, 5, 5);
+       
+-- Insert para cupom desconto
+INSERT INTO cupomDesconto (descricaoDesconto, valorDesconto, qntUtilizada, idcupomdesconto)
+VALUES ('EstudanteMirim', 0.15, 0, 1);
 
+
+-- Inserts para tabela PRODUTO_PEDIDO_Contém
+INSERT INTO PRODUTO_PEDIDO_Contém (somaValorProduto, fk_PEDIDO_idPedido, fk_PEDIDO_idCliente, fk_PRODUTO_idProduto)
+VALUES 
+    (100.0, 1, 1, 2001), -- Produto 1 - eBook1
+    (200.0, 2, 2, 2002), -- Produto 2 - eBook2
+    (150.0, 3, 3, 2003), -- Produto 3 - Acessório 1
+    (80.0, 4, 4, 2004),  -- Produto 4 - Acessório 2
+    (120.0, 5, 5, 2005), -- Produto 5 - Curso 1
+    (120.0, 5, 5, 2006), -- Produto 5 - Curso 2
+    (120.0, 5, 5, 2007), -- Produto 5 - Curso 3
+    (120.0, 5, 5, 2008), -- Produto 5 - Curso 4
+    (120.0, 5, 5, 2009), -- Produto 5 - Curso 5
+    (120.0, 5, 5, 2010); -- Produto 5 - Curso 6
+
+-- Inserts para tabela cliente
+INSERT INTO CLIENTE (idade, senha, email, idCliente, bairro, numAp, Rua, CEP, nome)
+VALUES 
+    (25, 'senha123', 'cliente1@email.com', 1, 'Centro', 101, 'Rua Principal', '12345-678', 'Cliente Um'),
+    (30, 'senha456', 'cliente2@email.com', 2, 'Bairro A', 202, 'Rua Secundária', '98765-432', 'Cliente Dois'),
+    (40, 'senha789', 'cliente3@email.com', 3, 'Bairro B', 303, 'Rua Terceira', '54321-876', 'Cliente Três'),
+    (35, 'senhaabc', 'cliente4@email.com', 4, 'Bairro C', 404, 'Rua Quarta', '87654-321', 'Cliente Quatro'),
+    (28, 'senhaxyz', 'cliente5@email.com', 5, 'Bairro D', 505, 'Rua Quinta', '23456-789', 'Cliente Cinco');
 
 -- Update na tabela CLIENTE
 UPDATE CLIENTE
@@ -575,10 +620,14 @@ BEGIN
     SELECT COUNT(*) INTO contador
     FROM PEDIDO 
     WHERE dataPedido >= CURRENT_DATE - INTERVAL '1 month' AND dataPedido <= CURRENT_DATE;
-    
+
     -- Exibição do valor da variável
-    RAISE NOTICE 'O número de pedidos realizados no último mês é: %', contador;
+    UPDATE PRODUTO
+    SET totalVendas = contador
+    WHERE idProduto > 0;
 END $$;
+
+SELECT * FROM PRODUTO;
 
 -- PERGUNTA NUMERO 3
 SELECT 
@@ -655,3 +704,27 @@ FROM
     Top3Alunos
 WHERE 
     Rank <= 3;
+--EASTER EGG
+
+-- EASTER EGG 1
+-- Verificar se o cliente comprou 5 cursos
+WITH CursosComprados AS (
+    SELECT
+        FK_PEDIDO_idCliente,
+        COUNT(DISTINCT fk_PRODUTO_idProduto) AS TotalCursosComprados
+    FROM
+        PRODUTO_PEDIDO_Contém
+    GROUP BY
+        FK_PEDIDO_idCliente
+)
+INSERT INTO cliente_cupomDesconto (fk_cupomDesconto_idCupomDesconto, fk_CLIENTE_idCliente)
+SELECT
+    1 AS fk_cupomDesconto_idCupomDesconto,  -- ID do cupom "EstudanteMirim"
+    FK_PEDIDO_idCliente
+FROM
+    CursosComprados
+WHERE
+    TotalCursosComprados >= 5;
+
+    
+SELECT * FROM cliente_cupomDesconto;
