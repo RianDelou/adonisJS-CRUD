@@ -434,13 +434,6 @@ VALUES
     (789012, 'Boleto bancário', '2024-04-25', 2, 2, FALSE, TRUE, '2024-04-21'),
     (345678, 'Transferência bancária', '2024-04-24', 3, 3, TRUE, FALSE, '2024-04-22');
 
--- Inserts para tabela AVALIACAO
-INSERT INTO AVALIAÇÃO (estrelas_1, estrelas_2, estrelas_3, estrelas_4, estrelas_5, comentario, idAvaliacao, idProduto)
-VALUES
-    (FALSE, TRUE, FALSE, FALSE, TRUE, 'Gostei muito do Produto A!', 1, 1),
-    (FALSE, FALSE, TRUE, TRUE, FALSE, 'Produto B atendeu minhas expectativas.', 2, 2),
-    (TRUE, FALSE, FALSE, TRUE, FALSE, 'Produto C superou minhas expectativas.', 3, 3);
-    
 -- Inserts para tabela ALUNO
 INSERT INTO ALUNO (Falta, Sobrenome, Primeiro_Nome, idAluno, FK_Responsavel_idResponsavel, FK_PSICOLOGO_idPsicologo, FK_PSICOLOGO_FK_FUNCIONARIO_FISICO_contrato)
 VALUES
@@ -482,6 +475,47 @@ VALUES
     (6, 1, 9.1),
     (6, 2, 8.9),
     (6, 3, 9.2);
+    
+-- Inserts para tabela PRODUTO
+INSERT INTO PRODUTO(idProduto, nome, valor, avaliacaoMedia, totalVendas)
+VALUES
+    (2001, 'eBook1', 12.31, null, 100),
+    (2002, 'eBook2', 12.31, null, 231),
+    (2003, 'acessório1', 12.31, null, 231),
+    (2004, 'acessório2', 12.31, null, 100),
+    (2005, 'curso1', 12.31, null, 142),
+    (2006, 'curso2', 12.31, null, 104);
+    
+-- Inserts para tabela AVALIAÇÃO
+INSERT INTO AVALIAÇÃO (estrelas_1, estrelas_2, estrelas_3, estrelas_4, estrelas_5, comentario, idAvaliacao, idProduto)
+VALUES
+    (TRUE, TRUE, TRUE, FALSE, TRUE, 'Gostei muito do produto ebook!', 1, 2001),
+    (TRUE, FALSE, FALSE, FALSE, TRUE, 'Não gostei do produto ebook!', 2, 2001),
+    (TRUE, TRUE, TRUE, TRUE, FALSE, 'Produto ebook2 atendeu minhas expectativas.', 1, 2002),
+    (TRUE, TRUE, TRUE, TRUE, FALSE, 'Produto ebook2 atendeu minhas expectativas.', 2, 2002),
+    (TRUE, TRUE, TRUE, TRUE, FALSE, 'Esse acessorio superou minhas expectativas.', 1, 2003),
+    (TRUE, TRUE, TRUE, TRUE, TRUE, 'Esse acessorio superou minhas expectativas.', 2, 2003),
+    (FALSE, FALSE, FALSE, FALSE, TRUE, 'Nao gostei desse acessorio2', 1, 2004),
+    (FALSE, FALSE, FALSE, FALSE, FALSE, 'Nao gostei desse acessorio2', 2, 2004),
+    (FALSE, FALSE, FALSE, TRUE, FALSE, 'esse curso nao é bom', 1, 2005),
+    (FALSE, FALSE, TRUE, TRUE, FALSE, 'esse curso nao é bom', 2, 2005),
+    (TRUE, FALSE, TRUE, TRUE, FALSE, 'Esse curso é bom', 1, 2006),
+    (TRUE, TRUE, TRUE, TRUE, FALSE, 'Esse curso é bom', 2, 2006);
+
+-- Inserts para tabela EBOOKS
+INSERT INTO EBOOKS (sinopse, autor, titulo, idEbooks, quantEstoque, FK_PRODUTO_idProduto)
+VALUES ('Sinopse do eBook 1', 'Autor 1', 'eBook 1', 1001, 10, 2001),
+       ('Sinopse do eBook 2', 'Autor 2', 'eBook 2', 1002, 20, 2002);
+
+-- Inserts para tabela ACESSORIOSTEMATICOS
+INSERT INTO ACESSORIOSTEMATICOS (quantEstoque, nomeAcessorio, descricao, idAcessoriosTematicos, FK_PRODUTO_idProduto)
+VALUES (5, 'Acessório 1', 'Descrição do acessório 1', 3001, 2003),
+       (8, 'Acessório 2', 'Descrição do acessório 2', 3002, 2004);
+
+-- Inserts para tabela CURSOS
+INSERT INTO CURSOS (nomeCurso, tema, idCursos, ementa, professorCurso, certificado, FK_PRODUTO_idProduto)
+VALUES ('Curso 1', 'Tema do Curso 1', 4001, 'Ementa do Curso 1', 'Professor 1', TRUE, 2005),
+       ('Curso 2', 'Tema do Curso 2', 4002, 'Ementa do Curso 2', 'Professor 2', TRUE, 2006);
 
 
 -- Update na tabela CLIENTE
@@ -494,10 +528,20 @@ UPDATE PRODUTO
 SET valor = 59.99
 WHERE idProduto = 2;
 
--- Update na tabela PEDIDO
-UPDATE PEDIDO
-SET metodoPagamento = 'Pix', entregaExpressa = TRUE
-WHERE idPedido = 3;
+-- Atualizar a tabela PRODUTO com as médias de avaliação
+UPDATE PRODUTO
+SET avaliacaoMedia = (
+    SELECT SUM(
+        CASE WHEN estrelas_1 THEN 1 ELSE 0 END +
+        CASE WHEN estrelas_2 THEN 1 ELSE 0 END +
+        CASE WHEN estrelas_3 THEN 1 ELSE 0 END +
+        CASE WHEN estrelas_4 THEN 1 ELSE 0 END +
+        CASE WHEN estrelas_5 THEN 1 ELSE 0 END
+    ) / 2.0
+    FROM AVALIAÇÃO
+    WHERE PRODUTO.idProduto = AVALIAÇÃO.idProduto
+);
+
 
 -- Delete na tabela CLIENTE
 DELETE FROM CLIENTE
@@ -510,6 +554,19 @@ WHERE idPedido = 1;
 -- Delete na tabela PRODUTO
 DELETE FROM PRODUTO
 WHERE idProduto = 3;
+
+-- PERGUNTA NUMERO 3
+SELECT 
+    nome,
+    avaliacaoMedia AS avaliacao,
+    CASE 
+        WHEN avaliacaoMedia < 3 THEN 'ruim'
+        WHEN avaliacaoMedia > 4 THEN 'boa'
+        ELSE 'média'
+    END AS satisfacao
+FROM 
+    PRODUTO;
+
 
 -- PERGUNTA NUMERO 6
 WITH MediaNotasPorAluno AS (
@@ -544,3 +601,4 @@ FROM
     Top3Alunos
 WHERE 
     Rank <= 3;
+
