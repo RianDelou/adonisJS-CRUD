@@ -548,16 +548,16 @@ VALUES
        
 -- Insert para cupom desconto
 INSERT INTO cupomDesconto (descricaoDesconto, valorDesconto, qntUtilizada, idcupomdesconto)
-VALUES ('EstudanteMirim', 0.15, 0, 1);
-
-
+VALUES ('EstudanteMirim', 0.15, 0, 1),
+       ('ClienteFiel', 0.10, 0, 2);
+  
 -- Inserts para tabela PRODUTO_PEDIDO_Contém
 INSERT INTO PRODUTO_PEDIDO_Contém (somaValorProduto, fk_PEDIDO_idPedido, fk_PEDIDO_idCliente, fk_PRODUTO_idProduto)
 VALUES 
     (100.0, 1, 1, 2001), -- Produto 1 - eBook1
     (200.0, 2, 2, 2002), -- Produto 2 - eBook2
-    (150.0, 3, 3, 2003), -- Produto 3 - Acessório 1
-    (80.0, 4, 4, 2004),  -- Produto 4 - Acessório 2
+    (150.0, 2, 2, 2003), -- Produto 3 - Acessório 1
+    (80.0, 2, 2, 2004),  -- Produto 4 - Acessório 2
     (120.0, 5, 5, 2005), -- Produto 5 - Curso 1
     (120.0, 5, 5, 2006), -- Produto 5 - Curso 2
     (120.0, 5, 5, 2007), -- Produto 5 - Curso 3
@@ -744,6 +744,8 @@ WITH CursosComprados AS (
         COUNT(DISTINCT fk_PRODUTO_idProduto) AS TotalCursosComprados
     FROM
         PRODUTO_PEDIDO_Contém
+    WHERE
+        fk_PRODUTO_idProduto BETWEEN 2005 AND 2010  -- IDs dos acessórios / eBooks
     GROUP BY
         FK_PEDIDO_idCliente
 )
@@ -757,4 +759,28 @@ WHERE
     TotalCursosComprados >= 5;
 
     
+SELECT * FROM cliente_cupomDesconto;
+
+-- EASTER EGG 2
+-- Verificar se o cliente comprou 3 acessórios ou eBooks
+WITH ProdutosComprados AS (
+    SELECT
+        FK_PEDIDO_idCliente,
+        COUNT(DISTINCT fk_PRODUTO_idProduto) AS TotalProdutosComprados
+    FROM
+        PRODUTO_PEDIDO_Contém
+    WHERE
+        fk_PRODUTO_idProduto BETWEEN 2001 AND 2004 -- IDs dos acessórios / eBooks
+    GROUP BY
+        FK_PEDIDO_idCliente
+)
+INSERT INTO cliente_cupomDesconto (fk_cupomDesconto_idCupomDesconto, fk_CLIENTE_idCliente)
+SELECT
+    2 AS fk_cupomDesconto_idCupomDesconto,  -- ID do cupom "ClienteFiel"
+    FK_PEDIDO_idCliente
+FROM
+    ProdutosComprados
+WHERE
+    TotalProdutosComprados >= 3;
+
 SELECT * FROM cliente_cupomDesconto;
