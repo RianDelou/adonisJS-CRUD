@@ -777,18 +777,14 @@ FROM
 WHERE 
     Rank <= 3;
 
---EASTER EGG
-
 -- EASTER EGG 1
 -- Verificar se o cliente comprou 5 cursos
 WITH CursosComprados AS (
     SELECT
         FK_PEDIDO_idCliente,
-        COUNT(DISTINCT fk_PRODUTO_idProduto) AS TotalCursosComprados
+        COUNT(DISTINCT CASE WHEN tipoProduto = 'curso' THEN fk_PRODUTO_idProduto END) AS TotalCursosComprados
     FROM
         PRODUTO_PEDIDO_Contem
-    WHERE
-        fk_PRODUTO_idProduto BETWEEN 2005 AND 2010  -- IDs dos acessórios / eBooks
     GROUP BY
         FK_PEDIDO_idCliente
 )
@@ -800,8 +796,8 @@ FROM
     CursosComprados
 WHERE
     TotalCursosComprados >= 5;
-
     
+
 SELECT * FROM cliente_cupomDesconto;
 
 -- EASTER EGG 2
@@ -809,11 +805,9 @@ SELECT * FROM cliente_cupomDesconto;
 WITH ProdutosComprados AS (
     SELECT
         FK_PEDIDO_idCliente,
-        COUNT(DISTINCT fk_PRODUTO_idProduto) AS TotalProdutosComprados
+        COUNT(DISTINCT CASE WHEN tipoProduto IN ('eBook', 'acessorio') THEN fk_PRODUTO_idProduto END) AS TotalProdutosComprados
     FROM
         PRODUTO_PEDIDO_Contem
-    WHERE
-        fk_PRODUTO_idProduto BETWEEN 2001 AND 2004 -- IDs dos acessórios / eBooks
     GROUP BY
         FK_PEDIDO_idCliente
 )
