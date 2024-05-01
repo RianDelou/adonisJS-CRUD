@@ -54,3 +54,12 @@
     <li>DELETE</li>
     <p>A nossa equipe deletou 3 registros de acordo com o ID de determinada tabela, nas quais foram: cliente (id 3), pedido (id 1), produto (id 3). Todos os dados com esse ID foram deletados. </p>
   </ol>
+  <br>
+<h3>Roteiro do Pitch</h3>
+  <ol>
+    <li>Relembrando a base do projeto, com os 3 modelos conceituais antes desenvolvidos</li>
+    <li>Apresentação e explicação do modelo conceitual</li>
+    <li>Apresentação superficial do modelo lógico</li>
+    <li>Formas de apresentar a eficiência do nosso modelo por meio de perguntas</li>
+    <li>Explicando Easter eggs produzidos como um tipo de "curiosidade" para o usuário</li>
+  </ol>
