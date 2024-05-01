@@ -432,7 +432,9 @@ INSERT INTO PEDIDO (notaFiscal, metodoPagamento, dataEntrega, idPedido, idClient
 VALUES
     (123456, 'Cartão de crédito', '2024-04-23', 1, 1, TRUE, FALSE, '2024-04-20'),
     (789012, 'Boleto bancário', '2024-04-25', 2, 2, FALSE, TRUE, '2024-04-21'),
-    (345678, 'Transferência bancária', '2024-04-24', 3, 3, TRUE, FALSE, '2024-04-22');
+    (345660, 'Boleto bancário', '2024-04-24', 3, 3, TRUE, FALSE, '2024-04-22'),
+    (345679, 'Boleto', '2024-04-24', 4, 4, TRUE, FALSE, '2024-05-22'),
+    (345680, 'Dinheiro', '2024-04-24', 5, 5, TRUE, FALSE, '2024-04-22');
 
 -- Inserts para tabela ALUNO
 INSERT INTO ALUNO (Falta, Sobrenome, Primeiro_Nome, idAluno, FK_Responsavel_idResponsavel, FK_PSICOLOGO_idPsicologo, FK_PSICOLOGO_FK_FUNCIONARIO_FISICO_contrato)
@@ -517,6 +519,15 @@ INSERT INTO CURSOS (nomeCurso, tema, idCursos, ementa, professorCurso, certifica
 VALUES ('Curso 1', 'Tema do Curso 1', 4001, 'Ementa do Curso 1', 'Professor 1', TRUE, 2005),
        ('Curso 2', 'Tema do Curso 2', 4002, 'Ementa do Curso 2', 'Professor 2', TRUE, 2006);
 
+-- Inserções de desconto
+INSERT INTO DESCONTO (DescontoEstudante, idDesconto, idPedido, DescontoFuncionario, DescontoBolsista, DescontoPessoaJuridica, FK_cupomDesconto_idCupomDesconto, FK_PEDIDO_idPedido, FK_PEDIDO_idCliente)
+VALUES 
+       (0.5, 1, 1, NULL, NULL, NULL, NULL, 1, 1),
+       (0.5, 2, 2, NULL, NULL, NULL, NULL, 2, 2),
+       (0.5, 3, 3, NULL, NULL, NULL, NULL, 3, 3),
+       (0.5, 4, 4, NULL, NULL, NULL, NULL, 4, 4),
+       (NULL, 5, 5, 0.25, NULL, NULL, NULL, 5, 5);
+
 
 -- Update na tabela CLIENTE
 UPDATE CLIENTE
@@ -545,15 +556,29 @@ SET avaliacaoMedia = (
 
 -- Delete na tabela CLIENTE
 DELETE FROM CLIENTE
-WHERE idCliente = 3;
-
--- Delete na tabela PEDIDO
-DELETE FROM PEDIDO
-WHERE idPedido = 1;
+WHERE idCliente = 23;  --apenas para teste
 
 -- Delete na tabela PRODUTO
 DELETE FROM PRODUTO
-WHERE idProduto = 3;
+WHERE idProduto = 10;  --apenas para teste
+
+-- Delete na tabela PRODUTO
+DELETE FROM PRODUTO
+WHERE idProduto = 10; --apenas para teste
+
+-- PERGUNTA NUMERO 1
+DO $$ 
+DECLARE 
+    contador INTEGER;
+BEGIN
+
+    SELECT COUNT(*) INTO contador
+    FROM PEDIDO 
+    WHERE dataPedido >= CURRENT_DATE - INTERVAL '1 month' AND dataPedido <= CURRENT_DATE;
+    
+    -- Exibição do valor da variável
+    RAISE NOTICE 'O número de pedidos realizados no último mês é: %', contador;
+END $$;
 
 -- PERGUNTA NUMERO 3
 SELECT 
@@ -566,6 +591,35 @@ SELECT
     END AS satisfacao
 FROM 
     PRODUTO;
+
+--PERGUNTA NUMERO 5
+SELECT
+    Tipo_Desconto,
+    MAX(Quantidade_Utilizada) AS Quantidade_Utilizada
+FROM (
+    SELECT 'Desconto Estudante' AS Tipo_Desconto, 
+           SUM(CASE WHEN DescontoEstudante IS NOT NULL THEN 1 ELSE 0 END) AS Quantidade_Utilizada
+    FROM DESCONTO
+    UNION ALL
+    SELECT 'Desconto Funcionário' AS Tipo_Desconto, 
+           SUM(CASE WHEN DescontoFuncionario IS NOT NULL THEN 1 ELSE 0 END) AS Quantidade_Utilizada
+    FROM DESCONTO
+    UNION ALL
+    SELECT 'Desconto Bolsista' AS Tipo_Desconto, 
+           SUM(CASE WHEN DescontoBolsista IS NOT NULL THEN 1 ELSE 0 END) AS Quantidade_Utilizada
+    FROM DESCONTO
+    UNION ALL
+    SELECT 'Desconto Pessoa Jurídica' AS Tipo_Desconto, 
+           SUM(CASE WHEN DescontoPessoaJuridica IS NOT NULL THEN 1 ELSE 0 END) AS Quantidade_Utilizada
+    FROM DESCONTO
+    UNION ALL
+    SELECT 'Cupom de Desconto' AS Tipo_Desconto, 
+           SUM(CASE WHEN FK_cupomDesconto_idCupomDesconto IS NOT NULL THEN 1 ELSE 0 END) AS Quantidade_Utilizada
+    FROM DESCONTO
+) AS Total_Descontos
+GROUP BY Tipo_Desconto;
+
+
 
 
 -- PERGUNTA NUMERO 6
@@ -601,4 +655,3 @@ FROM
     Top3Alunos
 WHERE 
     Rank <= 3;
-
