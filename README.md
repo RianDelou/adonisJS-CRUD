@@ -54,7 +54,7 @@
 <h3>Roteiro do Pitch</h3>
   <ol>
     <li>Relembrando a base do projeto, com os 3 modelos conceituais antes desenvolvidos</li>
-    <li>Apresentação e explicação do modelo conceitual</li>
+    <li>Apresentação e breve explicação do modelo conceitual</li>
     <li>Apresentação superficial do modelo lógico</li>
     <li>Formas de apresentar a eficiência do nosso modelo por meio de perguntas</li>
     <li>Explicando Easter eggs produzidos como um tipo de "curiosidade" para o usuário</li>
