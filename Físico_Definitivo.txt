@@ -575,10 +575,14 @@ BEGIN
     SELECT COUNT(*) INTO contador
     FROM PEDIDO 
     WHERE dataPedido >= CURRENT_DATE - INTERVAL '1 month' AND dataPedido <= CURRENT_DATE;
-    
+
     -- Exibição do valor da variável
-    RAISE NOTICE 'O número de pedidos realizados no último mês é: %', contador;
+    UPDATE PRODUTO
+    SET totalVendas = contador
+    WHERE idProduto > 0;
 END $$;
+
+SELECT * FROM PRODUTO;
 
 -- PERGUNTA NUMERO 3
 SELECT 
