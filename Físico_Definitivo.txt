@@ -437,14 +437,14 @@ VALUES
     (345680, 'Dinheiro', '2024-04-24', 5, 5, TRUE, FALSE, '2024-04-22');
 
 -- Inserts para tabela ALUNO
-INSERT INTO ALUNO (Falta, Sobrenome, Primeiro_Nome, idAluno, FK_Responsavel_idResponsavel, FK_PSICOLOGO_idPsicologo, FK_PSICOLOGO_FK_FUNCIONARIO_FISICO_contrato)
+INSERT INTO ALUNO (Falta, Sobrenome, Primeiro_Nome, idAluno, qntEmprestimo, FK_Responsavel_idResponsavel, FK_PSICOLOGO_idPsicologo, FK_PSICOLOGO_FK_FUNCIONARIO_FISICO_contrato)
 VALUES
-    (2, 'Silva', 'João', 1, NULL, NULL, NULL),
-    (0, 'Souza', 'Maria', 2, NULL, NULL, NULL),
-    (1, 'Oliveira', 'Pedro', 3, NULL, NULL, NULL),
-    (3, 'Santos', 'Ana', 4, NULL, NULL, NULL),
-    (1, 'Ferreira', 'Lucas', 5, NULL, NULL, NULL),
-    (2, 'Martins', 'Carla', 6, NULL, NULL, NULL);
+    (2, 'Silva', 'João', 1, 5, NULL, NULL, NULL),
+    (0, 'Souza', 'Maria', 2, 6, NULL, NULL, NULL),
+    (1, 'Oliveira', 'Pedro', 3, 8, NULL, NULL, NULL),
+    (3, 'Santos', 'Ana', 4, NULL, 12, NULL, NULL),
+    (1, 'Ferreira', 'Lucas', 5, NULL, 3, NULL, NULL),
+    (2, 'Martins', 'Carla', 6, NULL, 1, NULL, NULL);
 
 -- Inserts para tabela DISCIPLINA
 INSERT INTO DISCIPLINA (idDisciplina, Presencial, Remota, Eletiva, Obrigatoria)
