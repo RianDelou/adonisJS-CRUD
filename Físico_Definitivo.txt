@@ -1,4 +1,4 @@
-/* Lógico_Definitivo: */
+/* Lógico_1: */
 
 CREATE TABLE cupomDesconto (
     descricaoDesconto VARCHAR,
@@ -26,7 +26,7 @@ CREATE TABLE Estudante (
 
 CREATE TABLE DESCONTO (
     DescontoEstudante FLOAT,
-    idDesconto  INTEGER,
+    idDesconto INTEGER,
     idPedido INTEGER,
     DescontoFuncionario FLOAT,
     DescontoBolsista FLOAT,
@@ -34,7 +34,7 @@ CREATE TABLE DESCONTO (
     FK_cupomDesconto_idCupomDesconto INTEGER,
     FK_PEDIDO_idPedido INTEGER,
     FK_PEDIDO_idCliente INTEGER,
-    PRIMARY KEY (idDesconto , idPedido)
+    PRIMARY KEY (idDesconto, idPedido)
 );
 
 CREATE TABLE CLIENTE (
@@ -49,12 +49,12 @@ CREATE TABLE CLIENTE (
     nome VARCHAR
 );
 
-CREATE TABLE PESSOA_FÍSICA (
+CREATE TABLE PESSOA_FISICA (
     CPF VARCHAR,
-    IDPessoaFísica INTEGER,
+    IDPessoaFisica INTEGER,
     RG VARCHAR,
     FK_CLIENTE_idCliente INTEGER,
-    PRIMARY KEY (IDPessoaFísica, FK_CLIENTE_idCliente)
+    PRIMARY KEY (IDPessoaFisica, FK_CLIENTE_idCliente)
 );
 
 CREATE TABLE PEDIDO (
@@ -71,30 +71,30 @@ CREATE TABLE PEDIDO (
     PRIMARY KEY (idPedido, idCliente)
 );
 
-CREATE TABLE AVALIAÇÃO (
+CREATE TABLE AVALIACAO (
     estrelas_1 BOOLEAN,
     estrelas_2 BOOLEAN,
-    estrelas_3 BOOLEAN,
     estrelas_4 BOOLEAN,
     estrelas_5 BOOLEAN,
+    estrelas_3 BOOLEAN,
     comentario VARCHAR,
-    idAvaliacao  INTEGER,
+    idAvaliacao INTEGER,
     idProduto INTEGER,
     FK_PRODUTO_idProduto INTEGER,
-    PRIMARY KEY (idAvaliacao , idProduto)
+    PRIMARY KEY (idAvaliacao, idProduto)
 );
 
 CREATE TABLE TELEFONECLIENTE (
     telefoneCelular VARCHAR,
     telefoneEmpresarial VARCHAR,
     idCliente INTEGER,
-    idTelefone  INTEGER,
+    idTelefone VARCHAR,
     FK_CLIENTE_idCliente INTEGER,
-    PRIMARY KEY (idCliente, idTelefone )
+    PRIMARY KEY (idCliente, idTelefone)
 );
 
-CREATE TABLE PRODUTO_PEDIDO_Contém (
-    somaValorProduto FLOAT,
+CREATE TABLE PRODUTO_PEDIDO_Contem (
+    tipoProduto VARCHAR,
     fk_PEDIDO_idPedido INTEGER,
     fk_PEDIDO_idCliente INTEGER,
     fk_PRODUTO_idProduto INTEGER
@@ -110,7 +110,7 @@ CREATE TABLE PRODUTO (
 
 CREATE TABLE GERENTE_PRODUTOS (
     idGerenteProdutos INTEGER,
-    FK_FUNCIONARIO_VIRTUAL_contrato INTEGER,
+    FK_FUNCIONARIO_VIRTUAL_contrato BOOLEAN,
     PRIMARY KEY (idGerenteProdutos, FK_FUNCIONARIO_VIRTUAL_contrato)
 );
 
@@ -118,7 +118,7 @@ CREATE TABLE DP_GERAL (
     idDepartamento INTEGER PRIMARY KEY
 );
 
-CREATE TABLE CEO  (
+CREATE TABLE CEO_ (
     idCEO INTEGER,
     FK_DP_GERAL_idDepartamento INTEGER,
     PRIMARY KEY (idCEO, FK_DP_GERAL_idDepartamento)
@@ -138,7 +138,7 @@ CREATE TABLE CURSOS (
     ementa VARCHAR,
     professorCurso VARCHAR,
     certificado BOOLEAN,
-    valor_cursos INTEGER,
+    valor_cursos FLOAT,
     FK_PRODUTO_idProduto INTEGER,
     PRIMARY KEY (idCursos, FK_PRODUTO_idProduto)
 );
@@ -149,7 +149,7 @@ CREATE TABLE EBOOKS (
     titulo VARCHAR,
     idEbooks INTEGER,
     quantEstoque INTEGER,
-    valor_eBooks INTEGER,
+    valor_eBooks FLOAT,
     FK_PRODUTO_idProduto INTEGER,
     PRIMARY KEY (idEbooks, FK_PRODUTO_idProduto)
 );
@@ -159,7 +159,7 @@ CREATE TABLE ACESSORIOSTEMATICOS (
     nomeAcessorio VARCHAR,
     descricao VARCHAR,
     idAcessoriosTematicos INTEGER,
-    valor_acessorios INTEGER,
+    valor_acessorios FLOAT,
     FK_PRODUTO_idProduto INTEGER,
     PRIMARY KEY (idAcessoriosTematicos, FK_PRODUTO_idProduto)
 );
@@ -190,13 +190,13 @@ CREATE TABLE PROFESSOR (
 );
 
 CREATE TABLE FUNCIONARIO_VIRTUAL (
-    contrato INTEGER PRIMARY KEY,
+    contrato BOOLEAN PRIMARY KEY,
     cpf VARCHAR,
     salario FLOAT,
     Primeiro_Nome VARCHAR,
     sobrenome VARCHAR,
-    FK_CEO_idCEO INTEGER,
-    FK_CEO_FK_DP_GERAL_idDepartamento INTEGER
+    FK_CEO__idCEO INTEGER,
+    FK_CEO__FK_DP_GERAL_idDepartamento INTEGER
 );
 
 CREATE TABLE DISCIPLINA (
@@ -244,7 +244,7 @@ CREATE TABLE LIVROS (
 
 CREATE TABLE Gerencia (
     fk_GERENTE_PRODUTOS_idGerenteProdutos INTEGER,
-    fk_GERENTE_PRODUTOS_FK_FUNCIONARIO_VIRTUAL_contrato INTEGER,
+    fk_GERENTE_PRODUTOS_FK_FUNCIONARIO_VIRTUAL_contrato BOOLEAN,
     fk_PRODUTO_idProduto INTEGER
 );
 
@@ -293,7 +293,7 @@ ALTER TABLE DESCONTO ADD CONSTRAINT FK_DESCONTO_3
     REFERENCES PEDIDO (idPedido, idCliente)
     ON DELETE CASCADE;
  
-ALTER TABLE PESSOA_FÍSICA ADD CONSTRAINT FK_PESSOA_FÍSICA_2
+ALTER TABLE PESSOA_FISICA ADD CONSTRAINT FK_PESSOA_FISICA_2
     FOREIGN KEY (FK_CLIENTE_idCliente)
     REFERENCES CLIENTE (idCliente)
     ON DELETE CASCADE;
@@ -303,7 +303,7 @@ ALTER TABLE PEDIDO ADD CONSTRAINT FK_PEDIDO_2
     REFERENCES CLIENTE (idCliente)
     ON DELETE CASCADE;
  
-ALTER TABLE AVALIAÇÃO ADD CONSTRAINT FK_AVALIAÇÃO_2
+ALTER TABLE AVALIACAO ADD CONSTRAINT FK_AVALIACAO_2
     FOREIGN KEY (FK_PRODUTO_idProduto)
     REFERENCES PRODUTO (idProduto)
     ON DELETE CASCADE;
@@ -313,11 +313,11 @@ ALTER TABLE TELEFONECLIENTE ADD CONSTRAINT FK_TELEFONECLIENTE_2
     REFERENCES CLIENTE (idCliente)
     ON DELETE CASCADE;
  
-ALTER TABLE PRODUTO_PEDIDO_Contém ADD CONSTRAINT FK_PRODUTO_PEDIDO_Contém_1
+ALTER TABLE PRODUTO_PEDIDO_Contem ADD CONSTRAINT FK_PRODUTO_PEDIDO_Contem_1
     FOREIGN KEY (fk_PEDIDO_idPedido, fk_PEDIDO_idCliente)
     REFERENCES PEDIDO (idPedido, idCliente);
  
-ALTER TABLE PRODUTO_PEDIDO_Contém ADD CONSTRAINT FK_PRODUTO_PEDIDO_Contém_2
+ALTER TABLE PRODUTO_PEDIDO_Contem ADD CONSTRAINT FK_PRODUTO_PEDIDO_Contem_2
     FOREIGN KEY (fk_PRODUTO_idProduto)
     REFERENCES PRODUTO (idProduto);
  
@@ -326,7 +326,7 @@ ALTER TABLE GERENTE_PRODUTOS ADD CONSTRAINT FK_GERENTE_PRODUTOS_2
     REFERENCES FUNCIONARIO_VIRTUAL (contrato)
     ON DELETE CASCADE;
  
-ALTER TABLE CEO  ADD CONSTRAINT FK_CEO_2
+ALTER TABLE CEO_ ADD CONSTRAINT FK_CEO__2
     FOREIGN KEY (FK_DP_GERAL_idDepartamento)
     REFERENCES DP_GERAL (idDepartamento)
     ON DELETE CASCADE;
@@ -367,8 +367,8 @@ ALTER TABLE PROFESSOR ADD CONSTRAINT FK_PROFESSOR_2
     ON DELETE CASCADE;
  
 ALTER TABLE FUNCIONARIO_VIRTUAL ADD CONSTRAINT FK_FUNCIONARIO_VIRTUAL_2
-    FOREIGN KEY (FK_CEO_idCEO, FK_CEO_FK_DP_GERAL_idDepartamento)
-    REFERENCES CEO  (idCEO, FK_DP_GERAL_idDepartamento)
+    FOREIGN KEY (FK_CEO__idCEO, FK_CEO__FK_DP_GERAL_idDepartamento)
+    REFERENCES CEO_ (idCEO, FK_DP_GERAL_idDepartamento)
     ON DELETE RESTRICT;
  
 ALTER TABLE ALUNO ADD CONSTRAINT FK_ALUNO_2
@@ -431,14 +431,19 @@ ALTER TABLE emprestimo ADD CONSTRAINT FK_emprestimo_2
     REFERENCES ALUNO (idAluno)
     ON DELETE SET NULL;
  
+ALTER TABLE emprestimo ADD CONSTRAINT FK_emprestimo_3
+    FOREIGN KEY (fk_LIVROS_idLivros)
+    REFERENCES LIVROS (idLivros)
+    ON DELETE SET NULL;
+ 
 ALTER TABLE cliente_cupomDesconto ADD CONSTRAINT FK_cliente_cupomDesconto_1
     FOREIGN KEY (fk_cupomDesconto_idCupomDesconto)
     REFERENCES cupomDesconto (idCupomDesconto)
     ON DELETE SET NULL;
-
+ 
 ALTER TABLE cliente_cupomDesconto ADD CONSTRAINT FK_cliente_cupomDesconto_2
     FOREIGN KEY (fk_CLIENTE_idCliente)
-    REFERENCES cliente (idCliente)
+    REFERENCES CLIENTE (idCliente)
     ON DELETE SET NULL;
     
 -- Inserts para tabela PEDIDO
@@ -507,7 +512,7 @@ VALUES
     (2010, 'curso6', 12.31, null, 104);
     
 -- Inserts para tabela AVALIAÇÃO
-INSERT INTO AVALIAÇÃO (estrelas_1, estrelas_2, estrelas_3, estrelas_4, estrelas_5, comentario, idAvaliacao, idProduto)
+INSERT INTO AVALIACAO (estrelas_1, estrelas_2, estrelas_3, estrelas_4, estrelas_5, comentario, idAvaliacao, idProduto)
 VALUES
     (TRUE, TRUE, TRUE, FALSE, TRUE, 'Gostei muito do produto ebook!', 1, 2001),
     (TRUE, FALSE, FALSE, FALSE, TRUE, 'Não gostei do produto ebook!', 2, 2001),
@@ -556,18 +561,18 @@ VALUES ('EstudanteMirim', 0.15, 0, 1),
        ('ClienteFiel', 0.10, 0, 2);
   
 -- Inserts para tabela PRODUTO_PEDIDO_Contém
-INSERT INTO PRODUTO_PEDIDO_Contém (somaValorProduto, fk_PEDIDO_idPedido, fk_PEDIDO_idCliente, fk_PRODUTO_idProduto)
+INSERT INTO PRODUTO_PEDIDO_Contem (tipoProduto, fk_PEDIDO_idPedido, fk_PEDIDO_idCliente, fk_PRODUTO_idProduto)
 VALUES 
-    (100.0, 1, 1, 2001), -- Produto 1 - eBook1
-    (200.0, 2, 2, 2002), -- Produto 2 - eBook2
-    (150.0, 2, 2, 2003), -- Produto 3 - Acessório 1
-    (80.0, 2, 2, 2004),  -- Produto 4 - Acessório 2
-    (120.0, 5, 5, 2005), -- Produto 5 - Curso 1
-    (120.0, 5, 5, 2006), -- Produto 5 - Curso 2
-    (120.0, 5, 5, 2007), -- Produto 5 - Curso 3
-    (120.0, 5, 5, 2008), -- Produto 5 - Curso 4
-    (120.0, 5, 5, 2009), -- Produto 5 - Curso 5
-    (120.0, 5, 5, 2010); -- Produto 5 - Curso 6
+    ('eBook', 1, 1, 2001), -- Produto 1 - eBook1
+    ('eBook', 2, 2, 2002), -- Produto 2 - eBook2
+    ('acessorio', 2, 2, 2003), -- Produto 3 - Acessório 1
+    ('acessorio', 2, 2, 2004),  -- Produto 4 - Acessório 2
+    ('curso', 5, 5, 2005), -- Produto 5 - Curso 1
+    ('curso', 5, 5, 2006), -- Produto 5 - Curso 2
+    ('curso', 5, 5, 2007), -- Produto 5 - Curso 3
+    ('curso', 5, 5, 2008), -- Produto 5 - Curso 4
+    ('curso', 5, 5, 2009), -- Produto 5 - Curso 5
+    ('curso', 5, 5, 2010); -- Produto 5 - Curso 6
 
 -- Inserts para tabela cliente
 INSERT INTO CLIENTE (idade, senha, email, idCliente, bairro, numAp, Rua, CEP, nome)
@@ -600,8 +605,8 @@ SET avaliacaoMedia = (
         CASE WHEN estrelas_4 THEN 1 ELSE 0 END +
         CASE WHEN estrelas_5 THEN 1 ELSE 0 END
     ) / 2.0
-    FROM AVALIAÇÃO
-    WHERE PRODUTO.idProduto = AVALIAÇÃO.idProduto
+    FROM AVALIACAO
+    WHERE PRODUTO.idProduto = AVALIACAO.idProduto
 );
 
 
@@ -781,7 +786,7 @@ WITH CursosComprados AS (
         FK_PEDIDO_idCliente,
         COUNT(DISTINCT fk_PRODUTO_idProduto) AS TotalCursosComprados
     FROM
-        PRODUTO_PEDIDO_Contém
+        PRODUTO_PEDIDO_Contem
     WHERE
         fk_PRODUTO_idProduto BETWEEN 2005 AND 2010  -- IDs dos acessórios / eBooks
     GROUP BY
@@ -806,7 +811,7 @@ WITH ProdutosComprados AS (
         FK_PEDIDO_idCliente,
         COUNT(DISTINCT fk_PRODUTO_idProduto) AS TotalProdutosComprados
     FROM
-        PRODUTO_PEDIDO_Contém
+        PRODUTO_PEDIDO_Contem
     WHERE
         fk_PRODUTO_idProduto BETWEEN 2001 AND 2004 -- IDs dos acessórios / eBooks
     GROUP BY
