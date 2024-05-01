@@ -447,14 +447,14 @@ VALUES
     (345680, 'Dinheiro', '2024-04-24', 5, 5, TRUE, FALSE, '2024-04-22');
 
 -- Inserts para tabela ALUNO
-INSERT INTO ALUNO (Falta, Sobrenome, Primeiro_Nome, idAluno, FK_Responsavel_idResponsavel, FK_PSICOLOGO_idPsicologo, FK_PSICOLOGO_FK_FUNCIONARIO_FISICO_contrato)
+INSERT INTO ALUNO (Falta, Sobrenome, Primeiro_Nome, idAluno, qntEmprestimo, FK_Responsavel_idResponsavel, FK_PSICOLOGO_idPsicologo, FK_PSICOLOGO_FK_FUNCIONARIO_FISICO_contrato)
 VALUES
-    (2, 'Silva', 'João', 1, NULL, NULL, NULL),
-    (0, 'Souza', 'Maria', 2, NULL, NULL, NULL),
-    (1, 'Oliveira', 'Pedro', 3, NULL, NULL, NULL),
-    (3, 'Santos', 'Ana', 4, NULL, NULL, NULL),
-    (1, 'Ferreira', 'Lucas', 5, NULL, NULL, NULL),
-    (2, 'Martins', 'Carla', 6, NULL, NULL, NULL);
+    (2, 'Silva', 'João', 1, 5, NULL, NULL, NULL),
+    (0, 'Souza', 'Maria', 2, 6, NULL, NULL, NULL),
+    (1, 'Oliveira', 'Pedro', 3, 8, NULL, NULL, NULL),
+    (3, 'Santos', 'Ana', 4, 12, NULL, NULL, NULL),
+    (1, 'Ferreira', 'Lucas', 5, 3, NULL, NULL, NULL),
+    (2, 'Martins', 'Carla', 6, 1, NULL, NULL, NULL);
 
 -- Inserts para tabela DISCIPLINA
 INSERT INTO DISCIPLINA (idDisciplina, Presencial, Remota, Eletiva, Obrigatoria)
@@ -568,12 +568,14 @@ VALUES
 -- Inserts para tabela cliente
 INSERT INTO CLIENTE (idade, senha, email, idCliente, bairro, numAp, Rua, CEP, nome)
 VALUES 
-    (25, 'senha123', 'cliente1@email.com', 1, 'Centro', 101, 'Rua Principal', '12345-678', 'Cliente Um'),
-    (30, 'senha456', 'cliente2@email.com', 2, 'Bairro A', 202, 'Rua Secundária', '98765-432', 'Cliente Dois'),
-    (40, 'senha789', 'cliente3@email.com', 3, 'Bairro B', 303, 'Rua Terceira', '54321-876', 'Cliente Três'),
-    (35, 'senhaabc', 'cliente4@email.com', 4, 'Bairro C', 404, 'Rua Quarta', '87654-321', 'Cliente Quatro'),
-    (28, 'senhaxyz', 'cliente5@email.com', 5, 'Bairro D', 505, 'Rua Quinta', '23456-789', 'Cliente Cinco');
-
+    (35, 'senha123', 'cliente1@example.com', 1, 'Centro', 101, 'Rua A', '12345-678', 'Cliente 1'),
+    (45, '123456', 'cliente2@example.com', 2, 'Bairro X', 202, 'Rua B', '23456-789', 'Cliente 2'),
+    (28, 'senha1234', 'cliente3@example.com', 3, 'Bairro Y', 303, 'Rua C', '34567-890', 'Cliente 3'),
+    (25, 'senha123', 'cliente1@email.com', 4, 'Centro', 101, 'Rua Principal', '12345-678', 'Cliente Um'),
+    (30, 'senha456', 'cliente2@email.com', 5, 'Bairro A', 202, 'Rua Secundária', '98765-432', 'Cliente Dois'),
+    (40, 'senha789', 'cliente3@email.com', 6, 'Bairro B', 303, 'Rua Terceira', '54321-876', 'Cliente Três'),
+    (35, 'senhaabc', 'cliente4@email.com', 7, 'Bairro C', 404, 'Rua Quarta', '87654-321', 'Cliente Quatro'),
+    (28, 'senhaxyz', 'cliente5@email.com', 8, 'Bairro D', 505, 'Rua Quinta', '23456-789', 'Cliente Cinco');
 -- Update na tabela CLIENTE
 UPDATE CLIENTE
 SET idade = 40
@@ -629,6 +631,8 @@ END $$;
 
 SELECT * FROM PRODUTO;
 
+SELECT * FROM PRODUTO;
+
 -- PERGUNTA NUMERO 3
 SELECT 
     nome,
@@ -640,6 +644,31 @@ SELECT
     END AS satisfacao
 FROM 
     PRODUTO;
+    
+--PERGUNTA 4 
+-- Inserts para tabela PEDIDO (para os últimos 6 meses)
+INSERT INTO PEDIDO (notaFiscal, metodoPagamento, dataEntrega, idPedido, idCliente, entregaExpressa, entregaPadrao, dataPedido)
+VALUES
+    (123456, 'Cartão de crédito', '2024-04-23', 5, 1, TRUE, FALSE, '2024-04-20'),
+    (789012, 'Boleto bancário', '2024-04-25', 5, 2, FALSE, TRUE, '2024-04-21'),
+    (345660, 'Boleto bancário', '2024-04-24', 4, 2, TRUE, FALSE, '2024-04-22'),
+    (345679, 'Boleto', '2024-04-24', 4, 3, TRUE, FALSE, '2024-05-22'),
+    (344444, 'Dinheiro', '2024-04-24', 3, 1, TRUE, FALSE, '2024-04-22');
+
+SELECT 
+    c.nome AS Nome_Cliente,
+    COUNT(p.idPedido) AS Total_Pedidos
+FROM 
+    CLIENTE c
+INNER JOIN 
+    PEDIDO p ON c.idCliente = p.idCliente
+WHERE 
+    p.dataPedido >= CURRENT_DATE - INTERVAL '6 months'
+GROUP BY 
+    c.nome
+ORDER BY 
+    Total_Pedidos DESC
+LIMIT 3;
 
 --PERGUNTA NUMERO 5
 SELECT
@@ -704,6 +733,7 @@ FROM
     Top3Alunos
 WHERE 
     Rank <= 3;
+
 --EASTER EGG
 
 -- EASTER EGG 1
