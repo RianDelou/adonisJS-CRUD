@@ -40,7 +40,7 @@
    <p>A nossa equipe pensou em 2 easter eggs:</p>
    <ol>
      <li> Caso o usuário comprar 5 cursos, ele ganha um cupom exclusivo de 15% de desconto em qualquer produto da loja. O nome do cupom seria: EstudanteMirim. Apenas como uma recompensa que a loja não iria falar sobre, o cliente descobriria apenas completando os cursos.</li>
-     <li> Caso o usuário compre 8 acessórios / Ebooks, ganhe 1 de brinde. Isso também seria um cupom que daria 100% de desconto no acessório ou Ebooks. O nome do cupom seria: clienteFiel. Isso também seria uma recompensa que a loja não iria falar sobre, o cliente descobriria apenas comprando</li>
+     <li> Caso o usuário compre 3 acessórios / Ebooks, ganhe 1 de brinde. Isso também seria um cupom que daria 100% de desconto no acessório ou Ebooks. O nome do cupom seria: clienteFiel. Isso também seria uma recompensa que a loja não iria falar sobre, o cliente descobriria apenas comprando</li>
    </ol>
 
 <h3>Resumo do projeto</h3>
