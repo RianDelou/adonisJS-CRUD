@@ -575,14 +575,10 @@ BEGIN
     SELECT COUNT(*) INTO contador
     FROM PEDIDO 
     WHERE dataPedido >= CURRENT_DATE - INTERVAL '1 month' AND dataPedido <= CURRENT_DATE;
-
+    
     -- Exibição do valor da variável
-    UPDATE PRODUTO
-    SET totalVendas = contador
-    WHERE idProduto > 0;
+    RAISE NOTICE 'O número de pedidos realizados no último mês é: %', contador;
 END $$;
-
-SELECT * FROM PRODUTO;
 
 -- PERGUNTA NUMERO 3
 SELECT 
@@ -595,6 +591,38 @@ SELECT
     END AS satisfacao
 FROM 
     PRODUTO;
+    
+--PERGUNTA 4 
+-- Inserts para tabela CLIENTE
+INSERT INTO CLIENTE (idade, senha, email, idCliente, bairro, numAp, Rua, CEP, nome)
+VALUES
+    (35, 'senha123', 'cliente1@example.com', 1, 'Centro', 101, 'Rua A', '12345-678', 'Cliente 1'),
+    (45, '123456', 'cliente2@example.com', 2, 'Bairro X', 202, 'Rua B', '23456-789', 'Cliente 2'),
+    (28, 'senha1234', 'cliente3@example.com', 3, 'Bairro Y', 303, 'Rua C', '34567-890', 'Cliente 3');
+
+-- Inserts para tabela PEDIDO (para os últimos 6 meses)
+INSERT INTO PEDIDO (notaFiscal, metodoPagamento, dataEntrega, idPedido, idCliente, entregaExpressa, entregaPadrao, dataPedido)
+VALUES
+    (123456, 'Cartão de crédito', '2024-04-23', 5, 1, TRUE, FALSE, '2024-04-20'),
+    (789012, 'Boleto bancário', '2024-04-25', 5, 3, FALSE, TRUE, '2024-04-21'),
+    (345660, 'Boleto bancário', '2024-04-24', 4, 3, TRUE, FALSE, '2024-04-22'),
+    (345679, 'Boleto', '2024-04-24', 4, 1, TRUE, FALSE, '2024-05-22'),
+    (344444, 'Dinheiro', '2024-04-24', 3, 1, TRUE, FALSE, '2024-04-22');
+
+SELECT 
+    c.nome AS Nome_Cliente,
+    COUNT(p.idPedido) AS Total_Pedidos
+FROM 
+    CLIENTE c
+INNER JOIN 
+    PEDIDO p ON c.idCliente = p.idCliente
+WHERE 
+    p.dataPedido >= CURRENT_DATE - INTERVAL '6 months'
+GROUP BY 
+    c.nome
+ORDER BY 
+    Total_Pedidos DESC
+LIMIT 3;
 
 --PERGUNTA NUMERO 5
 SELECT
@@ -659,3 +687,5 @@ FROM
     Top3Alunos
 WHERE 
     Rank <= 3;
+    
+
