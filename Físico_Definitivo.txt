@@ -7,7 +7,6 @@ CREATE TABLE cupomDesconto (
     qntUtilizada INTEGER
 );
 
-
 CREATE TABLE PESSOA_JURIDICA (
     CNPJ VARCHAR,
     IM INTEGER,
