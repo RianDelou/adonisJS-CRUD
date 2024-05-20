@@ -16,6 +16,7 @@ CREATE TABLE PESSOA_JURIDICA (
     PRIMARY KEY (idPessoaJuridica, FK_CLIENTE_idCliente)
 );
 
+
 CREATE TABLE Estudante (
     carteiraEstudante INTEGER,
     desconto FLOAT,
