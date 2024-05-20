@@ -1,4 +1,4 @@
-/* Lógico_1: */
+/* Lógico:*/
 
 CREATE TABLE cupomDesconto (
     descricaoDesconto VARCHAR,
@@ -6,6 +6,7 @@ CREATE TABLE cupomDesconto (
     valorDesconto FLOAT,
     qntUtilizada INTEGER
 );
+
 
 CREATE TABLE PESSOA_JURIDICA (
     CNPJ VARCHAR,
