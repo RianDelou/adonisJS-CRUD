@@ -1,4 +1,4 @@
-/* Lógico: */
+/* Lógico:*/
 
 CREATE TABLE cupomDesconto (
     descricaoDesconto VARCHAR,
