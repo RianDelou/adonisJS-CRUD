@@ -7,6 +7,13 @@ CREATE TABLE cupomDesconto (
     qntUtilizada INTEGER
 );
 
+CREATE TABLE ATT_cupomDesconto (
+  idCupomDesconto INTEGER PRIMARY KEY,
+  descricaoDesconto VARCHAR,
+  valorDesconto FLOAT,
+  data_modificacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 CREATE TABLE PESSOA_JURIDICA (
     CNPJ VARCHAR,
     IM INTEGER,
@@ -48,6 +55,13 @@ CREATE TABLE CLIENTE (
     Rua VARCHAR,
     CEP VARCHAR,
     nome VARCHAR
+);
+
+CREATE TABLE ATT_REMOCAO_CLIENTE (
+    idCliente INTEGER PRIMARY KEY,
+    nome VARCHAR,
+    email VARCHAR,
+    data_remocao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE PESSOA_FISICA (
@@ -94,6 +108,16 @@ CREATE TABLE TELEFONECLIENTE (
     PRIMARY KEY (idCliente, idTelefone)
 );
 
+CREATE TABLE ATT_TELEFONECLIENTE (
+    telefoneCelular VARCHAR,
+    telefoneEmpresarial VARCHAR,
+    idCliente INTEGER,
+    idTelefone VARCHAR,
+    FK_CLIENTE_idCliente INTEGER,
+    data_modificacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (idCliente, idTelefone)
+);
+
 CREATE TABLE PRODUTO_PEDIDO_Contem (
     tipoProduto VARCHAR,
     fk_PEDIDO_idPedido INTEGER,
@@ -108,6 +132,15 @@ CREATE TABLE PRODUTO (
     idProduto INTEGER PRIMARY KEY,
     totalVendas INTEGER
 );
+
+CREATE TABLE ATT_PRODUTO (
+    idProduto INTEGER PRIMARY KEY,
+    nome VARCHAR,
+    valor FLOAT,
+    data_modificacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
 
 CREATE TABLE GERENTE_PRODUTOS (
     idGerenteProdutos INTEGER,
@@ -611,17 +644,140 @@ SET avaliacaoMedia = (
 );
 
 
--- Delete na tabela CLIENTE
-DELETE FROM CLIENTE
-WHERE idCliente = 23;  --apenas para teste
-
 -- Delete na tabela PRODUTO
 DELETE FROM PRODUTO
-WHERE idProduto = 10;  --apenas para teste
+WHERE idProduto = 14;  --apenas para teste
 
 -- Delete na tabela PRODUTO
 DELETE FROM PRODUTO
 WHERE idProduto = 10; --apenas para teste
+
+SELECT * FROM CLIENTE;
+-- Triggers
+
+-- Função para trigger 1
+
+CREATE OR REPLACE FUNCTION atualizarValorProduto()
+RETURNS trigger AS $$
+BEGIN
+  IF (OLD.valor IS DISTINCT FROM NEW.valor) THEN
+    -- se o valor antigo for igual ao novo, nn mudará
+    INSERT INTO ATT_PRODUTO (idProduto, nome, valor, data_modificacao) -- atualiza na tabela de atualizações de PRODUTO
+    VALUES (NEW.idProduto, NEW.nome, NEW.valor, NOW());
+  END IF;
+  -- Return NEW to proceed with the update
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+
+
+-- trigger 1 (trigger para atualizar o valor do produto)
+
+CREATE TRIGGER tg_atualiza_valor_produto
+AFTER INSERT OR UPDATE ON PRODUTO
+  FOR EACH ROW
+EXECUTE PROCEDURE atualizarValorProduto();
+
+
+UPDATE PRODUTO SET valor= 15 WHERE idProduto= 2001;
+UPDATE PRODUTO SET valor= 20 WHERE idProduto= 2004;
+
+SELECT * FROM PRODUTO;
+
+SELECT * FROM ATT_PRODUTO;
+
+
+-- trigger 2
+
+-- Função para trigger 2
+
+CREATE OR REPLACE FUNCTION atualizarValorDesconto()
+RETURNS trigger AS $$
+BEGIN
+  IF (OLD.valorDesconto IS DISTINCT FROM NEW.valorDesconto) THEN
+    INSERT INTO ATT_cupomDesconto (idcupomdesconto, descricaoDesconto, valorDesconto, data_modificacao)
+    VALUES (NEW.idcupomdesconto, NEW.descricaoDesconto, NEW.valorDesconto, NOW());
+  END IF;
+  
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- trigger 2 (trigger para atualizar o valor do desconto)
+
+CREATE TRIGGER tg_atualiza_valor_desconto
+AFTER INSERT OR UPDATE ON cupomDesconto
+  FOR EACH ROW
+EXECUTE PROCEDURE atualizarValorDesconto();
+
+INSERT INTO cupomDesconto (descricaoDesconto, idCupomDesconto, valorDesconto, qntUtilizada)
+VALUES ('cupomBom', 10, 0.20, 14);
+
+SELECT * FROM cupomDesconto;
+
+SELECT * FROM ATT_cupomDesconto;
+
+
+-- trigger 3 
+
+-- Função para trigger 3
+
+CREATE OR REPLACE FUNCTION removerCliente()
+RETURNS trigger AS $$
+BEGIN
+   INSERT INTO ATT_REMOCAO_CLIENTE (idCliente, nome, email, data_remocao)
+   VALUES (OLD.idCliente, OLD.nome, OLD.email, NOW());
+  
+   RETURN OLD;
+END;
+$$ LANGUAGE plpgsql;
+
+-- trigger 3 (trigger para atualizar o valor do desconto)
+
+CREATE TRIGGER tg_remove_cliente
+AFTER DELETE ON CLIENTE
+  FOR EACH ROW
+  EXECUTE PROCEDURE removerCliente();
+
+DELETE FROM CLIENTE WHERE idCliente= 4;
+
+SELECT * FROM CLIENTE;
+
+SELECT * FROM ATT_REMOCAO_CLIENTE;
+
+-- trigger 4 
+
+-- Função para trigger 4
+
+CREATE OR REPLACE FUNCTION atualizarNumeroCliente()
+RETURNS trigger AS $$
+BEGIN
+  IF (OLD.telefoneCelular IS DISTINCT FROM NEW.telefoneCelular OR OLD.telefoneEmpresarial IS DISTINCT FROM NEW.telefoneEmpresarial) THEN
+    INSERT INTO ATT_TELEFONECLIENTE (idCliente, idTelefone, telefoneEmpresarial, telefoneCelular, data_modificacao)
+    VALUES (NEW.idCliente, NEW.idTelefone, NEW.telefoneEmpresarial, NEW.telefoneCelular, NOW());
+  END IF;
+  
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- trigger 4 (trigger para atualizar o valor do desconto)
+
+INSERT INTO TELEFONECLIENTE (telefoneCelular, telefoneEmpresarial, idCliente, idTelefone)
+VALUES ('98822-2802', '98822-2842', 2001, 100);
+
+CREATE TRIGGER tg_atualiza_numero_cliente
+AFTER INSERT OR UPDATE ON TELEFONECLIENTE
+  FOR EACH ROW
+  EXECUTE PROCEDURE atualizarNumeroCliente();
+
+UPDATE TELEFONECLIENTE SET telefoneEmpresarial ='4002-8922' WHERE idCliente= 2001;
+
+SELECT * FROM TELEFONECLIENTE;
+
+SELECT * FROM ATT_TELEFONECLIENTE;
+
 
 -- PERGUNTA NUMERO 1
 DO $$ 
