@@ -306,7 +306,7 @@ CREATE TABLE cliente_cupomDesconto (
     fk_cupomDesconto_idCupomDesconto INTEGER,
     fk_CLIENTE_idCliente INTEGER
 );
- 
+
 ALTER TABLE PESSOA_JURIDICA ADD CONSTRAINT FK_PESSOA_JURIDICA_2
     FOREIGN KEY (FK_CLIENTE_idCliente)
     REFERENCES CLIENTE (idCliente)
@@ -479,7 +479,8 @@ ALTER TABLE cliente_cupomDesconto ADD CONSTRAINT FK_cliente_cupomDesconto_2
     FOREIGN KEY (fk_CLIENTE_idCliente)
     REFERENCES CLIENTE (idCliente)
     ON DELETE SET NULL;
-    
+
+
 -- Inserts para tabela PEDIDO
 INSERT INTO PEDIDO (notaFiscal, metodoPagamento, dataEntrega, idPedido, idCliente, entregaExpressa, entregaPadrao, dataPedido)
 VALUES
@@ -778,6 +779,81 @@ SELECT * FROM TELEFONECLIENTE;
 
 SELECT * FROM ATT_TELEFONECLIENTE;
 
+
+-- stored procedures
+
+-- procedure 1 (atualiza uma disciplina de presencial para remoto, ou vice-versa)
+
+SELECT * FROM DISCIPLINA;
+CREATE OR REPLACE PROCEDURE trocar_ead()
+LANGUAGE plpgsql
+AS $$
+  BEGIN
+  
+  UPDATE DISCIPLINA
+  SET Remota = true WHERE idDisciplina = 2;
+
+  UPDATE DISCIPLINA
+  SET Presencial = false WHERE idDisciplina = 2;
+  
+END $$;
+
+CALL trocar_ead();
+SELECT * FROM DISCIPLINA;
+
+-- procedure 2 (atualiza uma disciplina de obrigatório para eletiva, ou vice-versa)
+
+CREATE OR REPLACE PROCEDURE trocar_obrigatoriedade()
+LANGUAGE plpgsql
+AS $$
+  BEGIN
+  
+  UPDATE DISCIPLINA
+  SET Eletiva = TRUE WHERE idDisciplina = 2;
+
+  UPDATE DISCIPLINA
+  SET Obrigatoria = FALSE WHERE idDisciplina = 2;
+  
+END $$;
+
+CALL trocar_obrigatoriedade();
+SELECT * FROM DISCIPLINA;
+
+-- procedure 3 (contador de alunos)
+
+CREATE OR REPLACE PROCEDURE qtd_alunos(
+  qtd_total INTEGER
+)
+LANGUAGE plpgsql
+AS $$
+  BEGIN
+  
+  SELECT COUNT (*) INTO qtd_total FROM ALUNO;
+  RAISE NOTICE '-PROCEDURE 3- O número de alunos é de: %', qtd_total;
+  
+END $$;
+
+CALL qtd_alunos(NULL);
+
+-- procedure 4 (contador de funcionários)
+
+CREATE OR REPLACE PROCEDURE qtd_funcionarios(
+  qtd_professor INTEGER,
+  qtd_psicologos INTEGER,
+  qtd_total INTEGER
+)
+LANGUAGE plpgsql
+AS $$
+  BEGIN
+  
+  SELECT COUNT (*) INTO qtd_professor FROM PROFESSOR;
+  SELECT COUNT (*) INTO qtd_psicologos FROM PSICOLOGO;
+  qtd_total = qtd_psicologos + qtd_professor;
+  RAISE NOTICE '-PROCEDURE 4- O número de funcionários é de: %', qtd_total;
+  
+END $$;
+
+CALL qtd_funcionarios(NULL, NULL, NULL);
 
 -- PERGUNTA NUMERO 1
 DO $$ 
