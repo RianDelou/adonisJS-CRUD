@@ -1,0 +1,61 @@
+{
+  "name": "tempura",
+  "version": "0.4.0",
+  "repository": "lukeed/tempura",
+  "description": "A light, crispy, and delicious template engine",
+  "module": "dist/index.mjs",
+  "main": "dist/index.js",
+  "types": "index.d.ts",
+  "license": "MIT",
+  "author": {
+    "name": "Luke Edwards",
+    "email": "luke.edwards05@gmail.com",
+    "url": "https://lukeed.com"
+  },
+  "engines": {
+    "node": ">=10"
+  },
+  "scripts": {
+    "build": "node bin && bundt",
+    "test": "uvu -r esm test"
+  },
+  "files": [
+    "*.d.ts",
+    "esbuild",
+    "rollup",
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    },
+    "./esbuild": {
+      "import": "./esbuild/index.mjs",
+      "require": "./esbuild/index.js"
+    },
+    "./rollup": {
+      "import": "./rollup/index.mjs",
+      "require": "./rollup/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "modes": {
+    "default": "src/index.js",
+    "esbuild": "src/esbuild.js",
+    "rollup": "src/rollup.js"
+  },
+  "keywords": [
+    "engine",
+    "mustache",
+    "handlebars",
+    "template",
+    "html",
+    "hbs"
+  ],
+  "devDependencies": {
+    "bundt": "1.1.5",
+    "esm": "3.2.25",
+    "uvu": "0.5.1"
+  }
+}
