@@ -1054,3 +1054,48 @@ WHERE
     TotalProdutosComprados >= 3;
 
 SELECT * FROM cliente_cupomDesconto;
+
+-- SEGURANÇA
+
+CREATE ROLE usuario_admin WITH PASSWORD 'admin123';
+CREATE ROLE usuario_gerente WITH PASSWORD 'gerente123';
+CREATE ROLE usuario_funcionario WITH PASSWORD 'funcionario123';
+CREATE ROLE usuario_padrao WITH PASSWORD 'usuario123';
+
+
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO usuario_admin;
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO usuario_gerente;
+GRANT SELECT, INSERT, UPDATE ON CLIENTE, PEDIDO TO usuario_funcionario;
+GRANT SELECT ON CLIENTE, PEDIDO TO usuario_padrao;
+
+-- VIEWS DO BANCO DE DADOS
+
+-- VIEW 1: Clientes e seus respectivos pedidos //Fornece uma visão geral dos clientes e seus pedidos.
+
+CREATE VIEW Cliente_Pedido_Info AS
+SELECT c.idCliente, c.nome, c.email, COUNT(p.idPedido) AS totalPedidos
+FROM CLIENTE c
+LEFT JOIN PEDIDO p ON c.idCliente = p.idCliente
+GROUP BY c.idCliente, c.nome, c.email;
+
+
+-- VIEW 2: Produtos mais vendidos //Fornecerá uma lista dos produtos mais vendidos, juntamente com o total de vendas.
+
+CREATE VIEW Produtos_Mais_Vendidos AS
+SELECT nome, totalVendas
+FROM PRODUTO
+ORDER BY totalVendas DESC;
+
+-- VIEW 3: Total de clientes removidos //Mostrará o total de clientes removidos e a data de remoção.
+
+CREATE VIEW Clientes_Removidos AS
+SELECT COUNT(idCliente) AS totalRemovidos, DATE(data_remocao) AS dataRemocao
+FROM ATT_REMOCAO_CLIENTE
+GROUP BY DATE(data_remocao);
+
+-- VIEW 4: Total de pedidos por método de pagamento //Fornecerá uma contagem de pedidos agrupados por método de pagamento.
+
+CREATE VIEW Pedidos_Metodo_Pagamento AS
+SELECT metodoPagamento, COUNT(idPedido) AS totalPedidos
+FROM PEDIDO
+GROUP BY metodoPagamento;
